@@ -5,7 +5,7 @@ interface DogContainerProps {
   children: ReactNode;
 }
 
-export const DogSpinner = () => <Spinner size="xl" width={200} height={200} />;
+export const DogSpinner = () => <Spinner size="xl" width={10} height={10} />;
 
 export const DogContainer = forwardRef<HTMLDivElement, DogContainerProps>(
   ({ children }, ref) => (
