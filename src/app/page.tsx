@@ -11,7 +11,6 @@ const Homepage = () => {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // create as many GSAP animations and/or ScrollTriggers here as you want...
       gsap
         .timeline()
         .fromTo(
@@ -65,10 +64,7 @@ const Homepage = () => {
       <div className="grid min-h-[70vh] grid-cols-1 items-center md:grid-cols-2">
         <DogThree />
         <div className="col-start-1 md:row-start-1 " data-speed=".2">
-          <h1
-            className="mb-8 text-[clamp(3rem,18vmin,20rem)] font-extrabold leading-none tracking-tighter"
-            aria-label={"Lu Trung" + " " + "Kien"}
-          >
+          <h1 className="mb-8 text-[clamp(3rem,18vmin,20rem)] font-extrabold leading-none tracking-tighter">
             <span className="block text-slate-300">
               {renderLetters("Lu Trung", "first")}
             </span>

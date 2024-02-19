@@ -6,6 +6,7 @@ import { Urbanist } from "next/font/google";
 
 import StarsCanvas from "@/components/BackgroundStar";
 import CursorCustom from "@/components/CursorCustom";
+import Header from "@/components/Header";
 
 const urbanist = Urbanist({ subsets: ["latin"] });
 
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-slate-900 text-slate-100">
       <body className={urbanist.className}>
-        <CursorCustom />
+        <Header />
         {children}
         <StarsCanvas />
         <div className="background-gradient absolute inset-0 -z-50 max-h-screen" />
