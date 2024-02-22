@@ -9,7 +9,7 @@ const BlogPostIndex = () => {
         <HeadingCustom size="xl" className="mb-8 max-sm:mb-4">
           Projects
         </HeadingCustom>
-        <div className="prose prose-xl prose-invert mb-10">
+        <div className="prose prose-xl prose-invert mb-10 max-sm:mb-5">
           A selection of some of my favorite website and design projects.
         </div>
         <ProjectWrapper />
