@@ -1,8 +1,19 @@
+import clsx from "clsx";
 import React from "react";
 
-const Paragraph = ({ children }: { children: React.ReactNode }) => {
+interface Props {
+  className?: string;
+  children: React.ReactNode;
+}
+
+const Paragraph = ({ children, className }: Props) => {
   return (
-    <div className="prose prose-xl max-sm:prose-base prose-slate prose-invert col-start-1">
+    <div
+      className={clsx(
+        "prose prose-xl max-sm:prose-base prose-slate prose-invert col-start-1",
+        className,
+      )}
+    >
       {children}
     </div>
   );

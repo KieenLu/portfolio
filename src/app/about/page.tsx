@@ -22,11 +22,16 @@ const AboutPage = () => {
         <BioTitle title="Bio" />
         <div className="mt-4 max-sm:mt-2">
           {LIST_ABOUT.map(({ detail, time }, index) => (
-            <div key={index} className="flex text-xl items-center">
-              <span className="font-bold w-3/12 max-sm:w-3/12 max-sm:text-lg">
+            <div
+              key={index}
+              className="flex text-xl items-center max-md:items-start"
+            >
+              <div className="font-bold max-sm:w-3/12 max-sm:text-lg w-max">
                 {time}
-              </span>
-              <Paragraph>{detail}</Paragraph>
+              </div>
+              <Paragraph className="max-sm:flex-1 max-sm:ml-3 ml-4">
+                {detail}
+              </Paragraph>
             </div>
           ))}
         </div>
@@ -35,7 +40,7 @@ const AboutPage = () => {
       <Section delay={0.3}>
         <BioTitle title="I ♥" />
         <div className="mt-4 max-sm:mt-2">
-          <Paragraph>Art, Music, Playing Drums, Games</Paragraph>
+          <Paragraph className="">Art, Music, Playing Games</Paragraph>
         </div>
       </Section>
 
