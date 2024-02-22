@@ -30,7 +30,7 @@ export const LIST_PROJECT: TypeListProject[] = [
   {
     data: {
       name: "CFD Course",
-      href: "https://courses-cfd-kieenlu-livid.vercel.app/",
+      href: "https://courses-cfd.vercel.app/",
       tags: ["React", "AntDesign", "TailWindCSS", "Axios", "Redux", "..."],
       image: {
         alt: "Image's CDF Course",
