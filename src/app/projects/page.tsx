@@ -4,7 +4,7 @@ import ProjectWrapper from "@/components/ProjectItem";
 
 const BlogPostIndex = () => {
   return (
-    <div className="py-16 max-sm:py-8">
+    <div className="py-16 max-md:py-8">
       <Bounded>
         <HeadingCustom size="xl" className="mb-8 max-sm:mb-4">
           Projects

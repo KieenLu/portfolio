@@ -4,7 +4,7 @@ import Paragraph from "@/components/Paragraph";
 
 const Biography = () => {
   return (
-    <div className="grid gap-x-8 gap-y-6 md:grid-cols-[2fr,1fr] py-16 max-sm:py-8">
+    <div className="grid gap-x-8 gap-y-6 md:grid-cols-[2fr,1fr] py-16 max-md:py-8 max-sm:pb-0">
       <HeadingCustom size="md" className="col-start-1">
         About Me
       </HeadingCustom>

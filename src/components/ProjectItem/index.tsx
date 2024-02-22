@@ -128,7 +128,7 @@ export default function ProjectWrapper() {
             <Link
               target="_blank"
               href={data.href}
-              className="flex flex-col justify-between border-t border-t-slate-100 py-10 max-sm:py-4 text-slate-200 md:flex-row "
+              className="flex flex-col justify-between border-t border-t-slate-100 py-10 max-md:py-7 max-sm:py-4 text-slate-200 md:flex-row "
             >
               <div className="flex flex-col">
                 <span className="text-3xl font-bold max-sm:text-xl">
@@ -155,7 +155,7 @@ export default function ProjectWrapper() {
 
         {/* Hover element */}
         <div
-          className="max-sm:hidden hover-reveal pointer-events-none absolute left-0 top-0 -z-10 h-[320px] w-[220px] rounded-lg bg-cover bg-center opacity-0 transition-[background] duration-300"
+          className="max-md:hidden hover-reveal pointer-events-none absolute left-0 top-0 -z-10 h-[320px] w-[220px] rounded-lg bg-cover bg-center opacity-0 transition-[background] duration-300"
           style={{
             backgroundImage:
               currentItem !== null ? `url(${contentImages[currentItem]})` : "",
