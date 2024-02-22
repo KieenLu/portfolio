@@ -1,36 +1,51 @@
+import {
+  ImageProjectBenoit,
+  ImageProjectCFDCourse,
+  ImageProjectShopper,
+  ImageProjectWooder,
+} from "@/assets/images";
 import { TypeListProject } from "@/types/image";
 
 export const LIST_PROJECT: TypeListProject[] = [
   {
     data: {
       name: "Shopper",
-      href: "",
-      tags: ["Next.js"],
+      href: "https://shopper-next.vercel.app/",
+      tags: [
+        "Next.js",
+        "Typescript",
+        "AntDesign",
+        "TailWindCSS",
+        "Axios",
+        "Redux-Saga",
+        "NextAuth",
+        "...",
+      ],
       image: {
-        alt: "",
-        url: "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
+        alt: "Image's Shopper eCommerce",
+        url: ImageProjectShopper.src,
       },
     },
   },
   {
     data: {
       name: "CFD Course",
-      href: "",
-      tags: ["Next.js"],
+      href: "https://courses-cfd-kieenlu-livid.vercel.app/",
+      tags: ["React", "AntDesign", "TailWindCSS", "Axios", "Redux", "..."],
       image: {
-        alt: "",
-        url: "https://images.unsplash.com/photo-1488372759477-a7f4aa078cb6?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        alt: "Image's CDF Course",
+        url: ImageProjectCFDCourse.src,
       },
     },
   },
   {
     data: {
       name: "Benoit",
-      href: "",
-      tags: ["HTML", "CSS/SCSS"],
+      href: "https://kieenlu.github.io/Benoit/",
+      tags: ["HTML", "CSS/SCSS", "Grunt"],
       image: {
-        alt: "",
-        url: "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg",
+        alt: "Image's Benoit Landing Page",
+        url: ImageProjectBenoit.src,
       },
     },
   },
@@ -38,11 +53,11 @@ export const LIST_PROJECT: TypeListProject[] = [
   {
     data: {
       name: "Wooder",
-      href: "",
-      tags: ["HTML", "CSS/SCSS"],
+      href: "https://kieenlu.github.io/Wooder/",
+      tags: ["HTML", "CSS/SCSS", "Grunt"],
       image: {
-        alt: "",
-        url: "https://images.unsplash.com/photo-1488372759477-a7f4aa078cb6?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        alt: "Image's Wooder Landing Page",
+        url: ImageProjectWooder.src,
       },
     },
   },
