@@ -5,7 +5,6 @@ import React, { useEffect, useRef } from "react";
 
 import StarsCanvas from "../BackgroundStar";
 import Bounded from "../Bounded";
-import DogThree from "../Dog";
 
 const Hero = () => {
   const component = useRef(null);
@@ -66,7 +65,7 @@ const Hero = () => {
 
       <Bounded ref={component}>
         <div className="grid min-h-[70vh] grid-cols-1 items-center md:grid-cols-2">
-          <DogThree />
+          {/* <DogThree /> */}
           <div className="col-start-1 md:row-start-1 " data-speed=".2">
             <h1 className="mb-8 text-[clamp(4rem,14vmin,18rem)] font-extrabold leading-none tracking-tighter">
               <span className="block text-slate-300">

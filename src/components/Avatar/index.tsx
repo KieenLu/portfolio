@@ -43,7 +43,7 @@ export default function Avatar({
           x: (e.clientX - componentCenterX) / componentRect.width / 2,
         };
 
-        let distFromCenterX = 1 - Math.abs(componentPercent.x);
+        // let distFromCenterX = 1 - Math.abs(componentPercent.x);
 
         gsap
           .timeline({
@@ -56,16 +56,16 @@ export default function Avatar({
               duration: 0.5,
             },
             0,
-          )
-          .to(
-            ".highlight",
-            {
-              opacity: distFromCenterX - 0.7,
-              x: -10 + 20 * componentPercent.x,
-              duration: 0.5,
-            },
-            0,
           );
+        // .to(
+        //   ".highlight",
+        //   {
+        //     opacity: distFromCenterX - 0.7,
+        //     x: -10 + 20 * componentPercent.x,
+        //     duration: 0.5,
+        //   },
+        //   0,
+        // );
       };
     }, component);
     return () => ctx.revert(); // cleanup!
