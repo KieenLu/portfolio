@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import { MdClose, MdMenu } from "react-icons/md";
 
-import Container from "../Container";
+import Bounded from "../Bounded";
 import MenuLogo from "./MenuLogo";
 import MenuPath from "./MenuPath";
 
@@ -12,7 +12,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <Container>
+    <Bounded>
       <nav aria-label="Main navigation">
         <ul className="flex flex-col justify-between rounded-b-lg bg-slate-50 px-4 py-2 md:flex-row md:items-center md:rounded-xl !rounded-t-none">
           <div className="flex items-center justify-between">
@@ -45,6 +45,6 @@ export default function Header() {
           <MenuPath />
         </ul>
       </nav>
-    </Container>
+    </Bounded>
   );
 }
