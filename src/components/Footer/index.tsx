@@ -1,3 +1,5 @@
+"use client";
+
 import clsx from "clsx";
 import Link from "next/link";
 import React from "react";
@@ -6,7 +8,7 @@ import Bounded from "@/components/Bounded";
 import { LIST_CONTACT_ME } from "@/constants/contact";
 import { LIST_MENU } from "@/constants/menu";
 
-export default async function Footer() {
+export default function Footer() {
   return (
     <Bounded as="footer" className="text-slate-600">
       <div className="container mx-auto max-md:mt-0 flex flex-col items-center justify-between gap-6 py-8 sm:flex-row ">
