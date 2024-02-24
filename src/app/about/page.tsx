@@ -10,6 +10,7 @@ import {
 import { useRef, useState } from "react";
 import { MdArrowOutward } from "react-icons/md";
 
+import { ImageAvatar_1 } from "@/assets/images";
 import Avatar from "@/components/Avatar";
 import Bounded from "@/components/Bounded";
 import HeadingCustom from "@/components/HeadingCustom";
@@ -52,11 +53,14 @@ const AboutPage = () => {
         transition={{ duration: 1 }}
       >
         <div
-          className="h-full overflow-y-scroll-scroll lg:flex gap-40 mt-40"
+          className="h-full overflow-y-scroll-scroll lg:flex max-lg:flex gap-40 max-lg:gap-20 mt-40 max-lg:mt-28 max-md:mt-14 max-sm:mt-5"
           ref={containerRef}
         >
-          <div className="w-4/6 max-sm:w-full">
-            <div className="flex flex-col gap-12 justify-center pb-40">
+          <div className="w-4/6 max-sm:w-full max-lg:w-3/5">
+            <div className="hidden max-sm:block mb-5">
+              <Avatar image={ImageAvatar_1.src} />
+            </div>
+            <div className="flex flex-col gap-12 justify-center pb-40 max-lg:pb-28 max-sm:pb-20">
               <HeadingCustom as="h1" size="lg">
                 About me
               </HeadingCustom>
@@ -96,13 +100,13 @@ const AboutPage = () => {
 
             <Contact />
           </div>
-          <div className="w-2/6 max-sm:w-full sticky top-20 pt-0 h-max">
+          <div className="w-2/6 max-lg:w-2/5 sticky top-20 pt-0 h-max max-sm:hidden">
             <AnimatePresence>
               {LIST_AVATAR.map((item) => (
                 <motion.div
                   initial="hidden"
                   variants={animateFade(0.3)}
-                  animate={{ translateX: 200 }}
+                  animate={{ translateX: -100 }}
                   whileInView={indexImg === item.key ? "show" : "hidden"}
                   key={item.key}
                   className={clsx("absolute top-0 left-0")}

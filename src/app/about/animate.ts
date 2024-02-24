@@ -8,7 +8,7 @@ const animateFade = (delay: number) => {
         duration: 0.3,
         ease: [0.25, 0.25, 0.25, 0.55],
       },
-      translateX: 200,
+      translateX: -100,
     },
     show: {
       x: 0,

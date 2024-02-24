@@ -21,7 +21,7 @@ const Contact = () => {
 
   return (
     <div
-      className="flex flex-col gap-12 justify-center pb-40 overflow-hidden"
+      className="flex flex-col gap-12 justify-center pb-40 max-lg:pb-28 max-sm:pb-20 overflow-hidden"
       ref={contactRef}
     >
       <motion.div
