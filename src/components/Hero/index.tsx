@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from "react";
 
 import StarsCanvas from "../BackgroundStar";
 import Bounded from "../Bounded";
+import Footer from "../Footer";
 
 const Hero = () => {
   const component = useRef(null);
@@ -81,6 +82,8 @@ const Hero = () => {
           </div>
         </div>
       </Bounded>
+
+      <Footer />
     </>
   );
 };

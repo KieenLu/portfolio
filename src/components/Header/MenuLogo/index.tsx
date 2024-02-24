@@ -12,7 +12,7 @@ const MenuLogo = ({ name }: Props) => {
     <Link
       href={PATH.home}
       aria-label="Home page"
-      className="text-2xl font-extrabold tracking-tighter text-slate-900 transition-all duration-150 hover:text-yellow-400"
+      className="text-2xl font-extrabold tracking-tighter text-slate-900 transition-all duration-250 hover:text-yellow-400"
     >
       {name}
     </Link>
