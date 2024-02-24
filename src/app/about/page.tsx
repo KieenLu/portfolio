@@ -8,45 +8,29 @@ import {
   useScroll,
 } from "framer-motion";
 import { useRef, useState } from "react";
+import { MdArrowOutward } from "react-icons/md";
 
-import {
-  ImageProjectBenoit,
-  ImageProjectShopper,
-  ImageProjectWooder,
-} from "@/assets/images";
 import Avatar from "@/components/Avatar";
 import Bounded from "@/components/Bounded";
 import HeadingCustom from "@/components/HeadingCustom";
 import ScrollMotion from "@/components/ScrollMotion";
+import { LIST_AVATAR } from "@/constants/about";
 
 import animateFade from "./animate";
 import Contact from "./Contact";
 import Experience from "./Experience";
 import SkillContainer from "./SkillContainer";
 
-const LIST_IMG = [
-  {
-    img: ImageProjectShopper.src,
-    key: 0,
-  },
-  {
-    img: ImageProjectBenoit.src,
-    key: 1,
-  },
-  {
-    img: ImageProjectWooder.src,
-    key: 2,
-  },
-];
+const cvLink = "./cv.pdf";
 
 const AboutPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-
   const { scrollY } = useScroll();
+
   const [indexImg, setIndexImg] = useState<number>(0);
 
   const getIndexFromScrollY = (scrollYValue: number) => {
-    if (scrollYValue >= 1000) {
+    if (scrollYValue >= 1200) {
       return 2;
     } else if (scrollYValue >= 600) {
       return 1;
@@ -84,6 +68,26 @@ const AboutPage = () => {
                 front-end developer and have extensive knowledge in the future
               </p>
 
+              <div className="flex justify-end">
+                <a
+                  download={"Frontend_Developer_LuTrungKien.pdf"}
+                  href={cvLink}
+                  className={clsx(
+                    "group relative flex w-fit items-center justify-center overflow-hidden rounded-md border-2 border-slate-900 bg-slate-50  px-4 py-2 font-bold transition-transform ease-out  hover:scale-105",
+                  )}
+                >
+                  <span
+                    className={clsx(
+                      "absolute inset-0 z-0 h-full translate-y-9 bg-yellow-300 transition-transform  duration-300 ease-in-out group-hover:translate-y-0",
+                    )}
+                  />
+                  <span className="relative flex items-center justify-center gap-2 text-black">
+                    View CV
+                    <MdArrowOutward className="inline-block" />
+                  </span>
+                </a>
+              </div>
+
               <ScrollMotion />
             </div>
             <SkillContainer />
@@ -94,7 +98,7 @@ const AboutPage = () => {
           </div>
           <div className="w-2/6 max-sm:w-full sticky top-20 pt-0 h-max">
             <AnimatePresence>
-              {LIST_IMG.map((item) => (
+              {LIST_AVATAR.map((item) => (
                 <motion.div
                   initial="hidden"
                   variants={animateFade(0.3)}

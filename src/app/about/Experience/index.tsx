@@ -35,8 +35,7 @@ const Experience = () => {
               Frontend Developer
             </div>
             <div className="p-3 text-sm italic">
-              I led web development, offering expertise in JavaScript
-              frameworks.{" "}
+              I working web development, offering expertise in React frameworks.
             </div>
             <div className="p-3 text-red-400 text-sm font-semibold">
               04/2023 - Present
@@ -78,8 +77,8 @@ const Experience = () => {
               Graduated from CTUT - Can Tho University of Technology
             </div>
             <div className="p-3 text-sm italic">
-              I provided web solutions, applying a range of technologies to
-              address client requirements.{" "}
+              Completed the study program at CTUT - Can Tho University of
+              Technology
             </div>
             <div className="p-3 text-red-400 text-sm font-semibold">
               2022 - 2024
@@ -105,8 +104,7 @@ const Experience = () => {
               TOEIC Certificate
             </div>
             <div className="p-3 text-sm italic">
-              I provided web solutions, applying a range of technologies to
-              address client requirements.
+              Completed TOEIC certificate with 515 scores.
             </div>
             <div className="p-3 text-red-400 text-sm font-semibold">2022</div>
           </div>

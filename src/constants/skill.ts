@@ -21,7 +21,22 @@ export const LIST_SKILL = [
     skill: "Redux/Redux-Saga",
   },
   {
+    skill: "Gsap",
+  },
+  {
+    skill: "Framer Motion",
+  },
+  {
+    skill: "Design Responsive pixel standard",
+  },
+  {
     skill: "Git",
+  },
+  {
+    skill: "Gitlab",
+  },
+  {
+    skill: "Github",
   },
   {
     skill: "Jira",

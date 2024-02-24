@@ -1,12 +1,23 @@
 import { motion, useInView } from "framer-motion";
-import React, { useRef } from "react";
+import { useRef } from "react";
 
 import HeadingCustom from "@/components/HeadingCustom";
+import { LIST_CONTACT_ME } from "@/constants/contact";
 
 const Contact = () => {
   const contactRef = useRef(null);
 
   const isContactRefInView = useInView(contactRef, { margin: "-100px" });
+
+  const onNavigate = (key: string, href: string) => {
+    if (key === "phone") return;
+
+    if (key === "gmail") {
+      window.location.href = `mailto:${href}`;
+      return;
+    }
+    window.open(href, "_blank");
+  };
 
   return (
     <div
@@ -28,7 +39,18 @@ const Contact = () => {
         animate={isContactRefInView ? { x: 0 } : {}}
         className="flex gap-4 flex-wrap"
       >
-        fasdfdasfs
+        <div className="flex flex-col gap-5">
+          {LIST_CONTACT_ME.map(({ href, icon, name, key }, index) => (
+            <div
+              onClick={() => onNavigate(key, href)}
+              className="flex gap-3 transition-all duration-250 hover:text-yellow-400 cursor-pointer"
+              key={index}
+            >
+              {icon}
+              <span>{name}</span>
+            </div>
+          ))}
+        </div>
       </motion.div>
     </div>
   );

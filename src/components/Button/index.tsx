@@ -5,13 +5,13 @@ import { MdArrowOutward } from "react-icons/md";
 type ButtonProps = {
   showIcon?: boolean;
   className?: string;
-  text: string;
+  children: React.ReactNode;
 };
 
 export default function Button({
   showIcon = true,
   className,
-  text,
+  children,
 }: ButtonProps) {
   return (
     <button
@@ -26,7 +26,7 @@ export default function Button({
         )}
       />
       <span className="relative flex items-center justify-center gap-2 text-black">
-        {text} {showIcon && <MdArrowOutward className="inline-block" />}
+        {children} {showIcon && <MdArrowOutward className="inline-block" />}
       </span>
     </button>
   );
