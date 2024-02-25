@@ -12,7 +12,13 @@ export default function Footer() {
   const LIST_CONTACT_FOOTER = LIST_CONTACT_ME.filter(
     (item) => item.location === "contact",
   );
-
+  const onNavigate = (key: string, href: string) => {
+    if (key === "gmail") {
+      window.location.href = `mailto:${href}`;
+      return;
+    }
+    window.open(href, "_blank");
+  };
   return (
     <Bounded as="footer" className="text-slate-600">
       <div className="container mx-auto max-md:mt-0 flex flex-col items-center justify-between gap-6 py-8 sm:flex-row ">
@@ -60,14 +66,14 @@ export default function Footer() {
           </ul>
         </nav>
         <div className="socials inline-flex justify-center sm:justify-end">
-          {LIST_CONTACT_FOOTER.map(({ href, icon }, index) => (
-            <Link
-              href={href}
+          {LIST_CONTACT_FOOTER.map(({ href, icon, key }, index) => (
+            <div
+              onClick={() => onNavigate(key, href)}
               key={index}
-              className="p-2 text-2xl text-slate-300 transition-all duration-250 hover:scale-125 hover:text-yellow-400"
+              className="p-2 text-2xl text-slate-300 transition-all duration-250 hover:scale-125 hover:text-yellow-400 cursor-pointer"
             >
               {icon}
-            </Link>
+            </div>
           ))}
         </div>
       </div>
