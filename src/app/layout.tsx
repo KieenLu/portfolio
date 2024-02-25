@@ -1,5 +1,4 @@
 import "@/assets/css/globals.css";
-import "@/assets/css/cursor.css";
 
 import clsx from "clsx";
 import type { Metadata } from "next";

@@ -118,7 +118,7 @@ export default function ProjectWrapper() {
         className="grid border-b border-b-slate-100"
         onMouseLeave={onMouseLeave}
       >
-        {LIST_PROJECT.map(({ href, image, name, tags }, index) => (
+        {LIST_PROJECT.map(({ href, name, tags }, index) => (
           <li
             key={index}
             ref={(el) => (itemsRef.current[index] = el)}
