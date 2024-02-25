@@ -9,6 +9,10 @@ import { LIST_CONTACT_ME } from "@/constants/contact";
 import { LIST_MENU } from "@/constants/menu";
 
 export default function Footer() {
+  const LIST_CONTACT_FOOTER = LIST_CONTACT_ME.filter(
+    (item) => item.location === "contact",
+  );
+
   return (
     <Bounded as="footer" className="text-slate-600">
       <div className="container mx-auto max-md:mt-0 flex flex-col items-center justify-between gap-6 py-8 sm:flex-row ">
@@ -56,7 +60,7 @@ export default function Footer() {
           </ul>
         </nav>
         <div className="socials inline-flex justify-center sm:justify-end">
-          {LIST_CONTACT_ME.map(({ href, icon }, index) => (
+          {LIST_CONTACT_FOOTER.map(({ href, icon }, index) => (
             <Link
               href={href}
               key={index}
