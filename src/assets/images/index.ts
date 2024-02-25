@@ -1,3 +1,4 @@
+export { default as ImageAvatarHero } from "./avatar.png";
 export { default as ImageAvatar_1 } from "./avatar_1.jpg";
 export { default as ImageAvatar_2 } from "./avatar_2.jpg";
 export { default as ImageAvatar_3 } from "./avatar_3.jpg";
