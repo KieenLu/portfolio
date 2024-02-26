@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
-import React from "react";
 
 import { TypeListProject } from "@/types/image";
 
@@ -76,7 +75,7 @@ const ProjectItem = ({ href, image, name, tags }: TypeListProject) => {
           <h2 className="text-3xl font-bold max-sm:text-xl">{name}</h2>
           <h2 className="text-3xl font-bold max-sm:text-xl">{name}</h2>
         </div>
-        <div className="relative w-full h-56 md:w-full md:h-64 lg:w-[500px] lg:h-[350px] xl:w-[600px] xl:h-[420px] overflow-hidden ">
+        <div className="relative w-full h-56 md:w-full md:h-64 lg:w-[500px] lg:h-[350px] xl:w-[600px] xl:h-[360px] overflow-hidden ">
           <Image
             onClick={() => onGoProject(href)}
             className="img-project cursor-pointer"

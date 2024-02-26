@@ -53,7 +53,7 @@ export default function Header() {
               <MdClose color="white" />
             </button>
 
-            <ul className="h-screen w-screen flex items-center justify-center flex-col gap-2">
+            <ul className="h-screen w-screen flex items-center justify-center flex-col gap-5">
               {LIST_MENU_MOBILE.map(({ link, name, key }) => (
                 <li key={key}>
                   <div
