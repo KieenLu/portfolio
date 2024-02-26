@@ -15,7 +15,7 @@ export default function HeadingCustom({
 }: HeadingProps) {
   const textSizeClasses = {
     xl: "text-5xl md:text-7xl",
-    lg: "text-4xl md:text-6xl",
+    lg: "text-4xl md:text-5xl",
     md: "text-3xl md:text-4xl",
     sm: "text-2xl md:text-3xl",
   };

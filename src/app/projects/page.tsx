@@ -5,6 +5,7 @@ import { useRef } from "react";
 
 import HeadingCustom from "@/components/HeadingCustom";
 import ProjectItem from "@/components/ProjectItem";
+import ScrollAnimate from "@/components/ScrollAnimate";
 import { LIST_PROJECT } from "@/constants/projects";
 
 const PortfolioPage = () => {
@@ -16,7 +17,6 @@ const PortfolioPage = () => {
   return (
     <motion.div
       className="h-full"
-      initial={{ y: "-200vh" }}
       animate={{ y: "0%" }}
       transition={{ duration: 1 }}
     >
@@ -26,10 +26,11 @@ const PortfolioPage = () => {
             <HeadingCustom as="h1" size="lg">
               Projects
             </HeadingCustom>
+            <ScrollAnimate />
             <div className="w-full">
               <motion.div
                 style={{ x }}
-                className="flex mt-20 gap-10 max-lg:grid max-lg:grid-cols-2 max-lg:!transform-none max-lg:my-10 max-sm:grid-cols-1"
+                className="flex mt-10 gap-10 max-lg:grid max-lg:grid-cols-2 max-lg:!transform-none max-lg:my-10 max-sm:grid-cols-1"
               >
                 {LIST_PROJECT.map((item, index) => (
                   <ProjectItem key={index} {...item} />

@@ -67,7 +67,7 @@ const Hero = () => {
       <StarsCanvas />
 
       <Bounded ref={component}>
-        <div className="grid min-h-[70vh] grid-cols-1 items-center md:grid-cols-3 max-sm:gap-5">
+        <div className="grid min-h-[70vh] grid-cols-1 items-center md:grid-cols-3 max-sm:gap-5 overflow-hidden">
           <Section delay={0.2}>
             <AvatarHero />
           </Section>
@@ -75,7 +75,7 @@ const Hero = () => {
             className="col-start-1 md:row-start-1 md:col-end-3 "
             data-speed=".2"
           >
-            <h1 className="mb-8 text-[clamp(5rem,14vmin,18rem)] font-extrabold leading-none tracking-tighter">
+            <h1 className="mb-8 text-[clamp(5rem,14vmin,18rem)] font-extrabold leading-none tracking-tighter overflow-hidden">
               <span className="block text-slate-300 max-sm:flex max-sm:items-center max-sm:justify-center">
                 {renderLetters("Lu Trung", "first")}
               </span>
