@@ -81,6 +81,7 @@ const ProjectItem = ({ href, image, name, tags }: TypeListProject) => {
             className="img-project cursor-pointer"
             src={image.url}
             alt={image.alt}
+            loading="lazy"
             fill
           />
         </div>
