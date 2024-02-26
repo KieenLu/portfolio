@@ -18,7 +18,7 @@ export const LIST_ABOUT = [
     detail: "Working as a freelancer",
   },
   {
-    time: "04/2023 - Present",
+    time: "02/2023 - Present",
     detail: "Start working at Atech Solution",
   },
 ];
