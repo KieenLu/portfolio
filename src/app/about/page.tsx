@@ -64,16 +64,19 @@ const AboutPage = () => {
                 About me
               </HeadingCustom>
               <p className="text-lg">
-                Seeking for an entry-level position within a growing company
-                where I can learn new things, technologies, and skills to
-                accomplish any task that company assigns to me or I would have
-                chance to work with. My goal is to become a professional
-                front-end developer and have extensive knowledge in the future
+                I’m actively seeking a foundational role in a fast-growing
+                company, aiming to contribute my skills and knowledge while
+                immersed in a diverse environment for continuous learning, and
+                practice. Committed to perfecting my skills and embracing new
+                challenges, I’m prepared to embark on innovative experiments,
+                pushing the boundaries of what’s possible. My ultimate goal is
+                to consistently surpass not just who I was yesterday but also
+                who I am today.
               </p>
 
               <div className="flex justify-end">
                 <a
-                  download={"Frontend_Developer_LuTrungKien.pdf"}
+                  download={"Frontend-Developer_Lu-Trung-Kien.pdf"}
                   href={cvLink}
                   className={clsx(
                     "group relative flex w-fit items-center justify-center overflow-hidden rounded-md border-2 border-slate-900 bg-slate-50  px-4 py-2 font-bold transition-transform ease-out  hover:scale-105",
