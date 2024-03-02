@@ -9,7 +9,7 @@ import { TypeListProject } from "@/types/image";
 export const LIST_PROJECT: TypeListProject[] = [
   {
     name: "Shopper",
-    href: "https://shopper-next.vercel.app/",
+    href: "https://e-shopper.site/",
     tags: [
       "Next.js",
       "Typescript",
