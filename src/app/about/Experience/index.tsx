@@ -67,7 +67,7 @@ const Experience = () => {
               address client requirements.
             </div>
             <div className="p-3 text-red-400 text-sm font-semibold">
-              11/2022 - 04/2024
+              11/2022 - 04/2023
             </div>
           </div>
         </div>
