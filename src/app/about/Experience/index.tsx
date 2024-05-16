@@ -81,7 +81,7 @@ const Experience = () => {
               Technology
             </div>
             <div className="p-3 text-red-400 text-sm font-semibold">
-              2022 - 2024
+              2018 - 2022
             </div>
           </div>
           <div className="w-1/6 flex justify-center">
