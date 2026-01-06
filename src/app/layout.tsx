@@ -1,31 +1,44 @@
-import "@/assets/css/globals.css";
+import "@/styles/globals.css";
+import "@/styles/custom.css";
 
 import clsx from "clsx";
 import type { Metadata } from "next";
-import { Urbanist } from "next/font/google";
+import localFont from "next/font/local";
 
-import Header from "@/components/Header";
+import CreativeBackground from "@/components/Background";
+import Wrapper from "@/components/Wrapper";
 
-const urbanist = Urbanist({ subsets: ["latin"] });
-
+const ppNeueMachina = localFont({
+    src: "../../public/fonts/PPNeueMachina-InktrapRegular.otf",
+    display: "swap",
+    variable: "--font-pp-neue-machina",
+    fallback: [
+        "ui-sans-serif",
+        "system-ui",
+        "sans-serif",
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji",
+    ],
+});
 export const metadata: Metadata = {
-  title: "Portfolio Kieenlu",
-  description: "Portfolio Kieenlu",
+    title: "Portfolio's Killian",
+    description: "Portfolio's Killian",
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en" className="bg-slate-900 text-slate-100">
-      <body className={clsx(urbanist.className, "relative min-h-screen")}>
-        <Header />
-        {children}
-        <div className="background-gradient absolute inset-0 -z-50 max-h-screen" />
-        <div className="pointer-events-none absolute inset-0 -z-40 h-full bg-[url('/image/noisetexture.jpg')] opacity-20 mix-blend-soft-light"></div>
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+            <body className={clsx(ppNeueMachina.className, "relative h-dvh overflow-hidden")}>
+                <CreativeBackground />
+
+                <Wrapper>{children}</Wrapper>
+            </body>
+        </html>
+    );
 }
