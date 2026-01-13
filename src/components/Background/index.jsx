@@ -60,7 +60,7 @@ const CreativeBackground = () => {
                 topRightY,
                 topRightRadius
             );
-            topRightGradient.addColorStop(0, "rgba(64, 164, 223, 0.35)"); // Slightly increased opacity
+            topRightGradient.addColorStop(0.1, "rgba(64, 164, 223, 0.35)"); // Slightly increased opacity
             topRightGradient.addColorStop(0.3, "rgba(64, 164, 223, 0.18)");
             topRightGradient.addColorStop(0.6, "rgba(64, 164, 223, 0.08)");
             topRightGradient.addColorStop(1, "rgba(64, 164, 223, 0)");

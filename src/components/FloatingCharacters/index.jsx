@@ -31,13 +31,12 @@ const FloatingCharacters = () => {
         });
         renderer.setClearColor(0x000000, 0);
         // Enhanced shadow settings
-        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.enabled = false;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         renderer.shadowMap.needsUpdate = true;
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // Tone mapping và color management cho chất liệu mịn màng hơn
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.2;
         renderer.outputEncoding = THREE.sRGBEncoding;
@@ -91,13 +90,13 @@ const FloatingCharacters = () => {
                 const geometry = new TextGeometry(char, {
                     font: font,
                     size: size,
-                    height: 0.5, // Increased for better shadows
-                    curveSegments: 32,
+                    height: 0.4, // Increased for better shadows
+                    curveSegments: 48,
                     bevelEnabled: true,
                     bevelThickness: 0.1,
-                    bevelSize: 0.06,
+                    bevelSize: 0.04,
                     bevelOffset: 0,
-                    bevelSegments: 12,
+                    bevelSegments: 6,
                 });
 
                 // Material with CubeCamera environment map
