@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
+    "@gsap/react": "^2.1.2",
     "@next/font": "^14.2.15",
     "@react-three/drei": "^9.97.0",
     "@react-three/fiber": "^8.15.16",
@@ -25,6 +26,7 @@
     "three": "^0.161.0"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",
     "@types/react": "^18",

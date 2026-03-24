@@ -27,12 +27,12 @@ const Wrapper = ({ children }: Props) => {
     const handleClose = () => {};
 
     return (
-        <div className="relative grid h-full grid-cols-[40px_1fr] grid-rows-[40px_1fr_40px] overflow-hidden rounded border border-base-300 transition-all duration-7000">
+        <div className="relative grid h-full grid-cols-[40px_1fr] grid-rows-[40px_1fr_40px] overflow-hidden rounded transition-all duration-7000 p-2">
             {/* Top Left Corner */}
-            <div className="border-r border-b border-base-300" />
+            <div className="border border-base-300" />
 
             {/* Top Navigation Bar */}
-            <header className="glossy flex items-center justify-between border-b border-base-300 p-3">
+            <header className="glossy flex items-center justify-between border-b border-r border-t border-base-300 p-3">
                 <HeadingSection title="Home" />
 
                 <div className="flex items-center gap-3">
@@ -52,7 +52,7 @@ const Wrapper = ({ children }: Props) => {
             </header>
 
             {/* Left Sidebar Navigation */}
-            <nav className="glossy row-span-1 flex flex-col items-center justify-center gap-3 border-r border-base-300">
+            <nav className="glossy row-span-1 flex flex-col items-center justify-center gap-3 border-l border-r border-base-300">
                 {NAVIGATION_ITEMS.map(({ path, icon: Icon, label }) => (
                     <ButtonIcon
                         key={path}
@@ -69,10 +69,10 @@ const Wrapper = ({ children }: Props) => {
             <main className="overflow-y-scroll">{children}</main>
 
             {/* Bottom Left Corner */}
-            <div className="border-l border-t border-base-300" />
+            <div className="border-l border-t border-b border-base-300" />
 
             {/* Bottom Navigation Bar */}
-            <footer className="border-t border-base-300" />
+            <footer className="border-t border-base-300 border-b border-r" />
 
             <FloatingCharacters />
         </div>
