@@ -1,82 +1,79 @@
 "use client";
 
-import clsx from "clsx";
-import Link from "next/link";
-import React from "react";
+import { useEffect, useState } from "react";
 
-import Bounded from "@/components/Bounded";
-import { LIST_CONTACT_ME } from "@/constants/contact";
-import { LIST_MENU } from "@/constants/menu";
+import { PATH } from "@/constants/path";
 
-export default function Footer() {
-  const LIST_CONTACT_FOOTER = LIST_CONTACT_ME.filter(
-    (item) => item.location === "contact",
-  );
-  const onNavigate = (key: string, href: string) => {
-    if (key === "gmail") {
-      window.location.href = `mailto:${href}`;
-      return;
-    }
-    window.open(href, "_blank");
-  };
-  return (
-    <Bounded as="footer" className="text-slate-600">
-      <div className="container mx-auto max-md:mt-0 flex flex-col items-center justify-between gap-6 py-8 sm:flex-row ">
-        <div className="name flex flex-col items-center justify-center gap-x-4 gap-y-2 sm:flex-row sm:justify-self-start">
-          <Link
-            href="/"
-            className="text-xl font-extrabold tracking-tighter text-slate-100 transition-colors duration-250 hover:text-yellow-400"
-          >
-            Kieenlu
-          </Link>
-          <span
-            className="hidden text-5xl font-extralight leading-[0] text-slate-400 sm:inline"
-            aria-hidden={true}
-          >
-            /
-          </span>
-          <p className=" text-sm text-slate-300 ">
-            © {new Date().getFullYear()} Lu Trung Kien
-          </p>
-        </div>
-        <nav className="navigation" aria-label="Footer Navigation">
-          <ul className="flex items-center gap-1">
-            {LIST_MENU.map(({ link, name }, index) => (
-              <React.Fragment key={index}>
-                <li>
-                  <Link
-                    href={link}
-                    className={clsx(
-                      "group relative block overflow-hidden  rounded px-3 py-1 text-base font-bold text-slate-100 transition-colors duration-250 hover:hover:text-yellow-400",
-                    )}
-                  >
-                    {name}
-                  </Link>
-                </li>
-                {index < LIST_MENU.length - 1 && (
-                  <span
-                    className="text-4xl font-thin leading-[0] text-slate-400"
-                    aria-hidden="true"
-                  >
-                    /
-                  </span>
-                )}
-              </React.Fragment>
-            ))}
-          </ul>
-        </nav>
-        <div className="socials inline-flex justify-center sm:justify-end">
-          {LIST_CONTACT_FOOTER.map(({ href, icon, key }, index) => (
-            <div
-              onClick={() => onNavigate(key, href)}
-              key={index}
-              className="p-2 text-2xl text-slate-300 transition-all duration-250 hover:scale-125 hover:text-yellow-400 cursor-pointer"
-            >
-              {icon}
+const getTime = () =>
+    new Date().toLocaleTimeString("en-US", {
+        timeZone: "Asia/Ho_Chi_Minh",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+    });
+
+const Footer = () => {
+    const footerMenu = [
+        { name: "Home", href: PATH.HOME },
+        { name: "About", href: PATH.ABOUT_ME },
+        // { name: "Work", href: PATH.WORK },
+        // { name: "Experiments", href: PATH.EXPERIMENTS },
+        // { name: "Contact", href: PATH.CONTACT },
+    ];
+
+    const [time, setTime] = useState("");
+
+    useEffect(() => {
+        setTime(getTime());
+
+        let intervalId: ReturnType<typeof setInterval>;
+        const msUntilNextSecond = 1000 - (Date.now() % 1000);
+        const timeoutId = setTimeout(() => {
+            setTime(getTime());
+            intervalId = setInterval(() => setTime(getTime()), 1000);
+        }, msUntilNextSecond);
+
+        return () => {
+            clearTimeout(timeoutId);
+            clearInterval(intervalId);
+        };
+    }, []);
+
+    return (
+        <footer
+            className="glossy-25 border-t border-base-300 py-10 font-medium"
+            style={{
+                backgroundColor: "rgba(0,0,0,0.3)",
+                transition: "background-color 0.3s, border-color 0.3s",
+            }}
+        >
+            <div className="container flex max-w-screen-2xl flex-col gap-20 lg:w-10/12 lg:gap-80 items-end lg:pt-20 lg:pb-60">
+                <nav
+                    className="flex flex-col items-center gap-10 lg:flex-row lg:justify-between"
+                    aria-label="Footer Menu"
+                >
+                    <ul className="flex flex-col items-center gap-6 sm:flex-row">
+                        {footerMenu.map((item) => (
+                            <li key={item.name}>
+                                <a
+                                    href={item.href}
+                                    className="py-2 lowercase transition-colors hover:text-gray-300 text-gray-400 duration-300"
+                                >
+                                    {item.name}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
             </div>
-          ))}
-        </div>
-      </div>
-    </Bounded>
-  );
-}
+            <div className="text-gray-300 text-center">
+                Ho Chi Minh City, Vietnam Time:{" "}
+                <span className="tabular-nums" suppressHydrationWarning>
+                    {time}
+                </span>
+            </div>
+        </footer>
+    );
+};
+
+export default Footer;

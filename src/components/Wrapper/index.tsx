@@ -1,9 +1,11 @@
 "use client";
 
+import Lenis from "lenis";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
 import { useFullscreen } from "@/hooks/useFullScreenMode";
+import { usePageConcept } from "@/hooks/usePageConcept";
 
 import ButtonIcon from "../ButtonIcon";
 import FloatingCharacters from "../FloatingCharacters";
@@ -19,12 +21,40 @@ interface Props {
 }
 
 const Wrapper = ({ children }: Props) => {
+    const mainRef = useRef<HTMLElement>(null);
     const pathname = usePathname();
+
+    const { color } = usePageConcept();
+
     const { isFullScreen, toggleFullScreen } = useFullscreen();
 
-    const handleMinimize = () => {};
+    useEffect(() => {
+        if (!mainRef.current) return;
+        const lenis = new Lenis({
+            wrapper: mainRef.current,
+            content: mainRef.current.firstElementChild as HTMLElement,
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: "vertical",
+            smoothWheel: true,
+        });
+        let rafId: number;
+        const raf = (time: number) => {
+            lenis.raf(time);
+            rafId = requestAnimationFrame(raf);
+        };
+        rafId = requestAnimationFrame(raf);
+        return () => {
+            cancelAnimationFrame(rafId);
+            lenis.destroy();
+        };
+    }, []);
 
-    const handleClose = () => {};
+    const handleExitFullScreen = () => {
+        if (isFullScreen) {
+            toggleFullScreen();
+        }
+    };
 
     return (
         <div className="relative grid h-full grid-cols-[40px_1fr] grid-rows-[40px_1fr_40px] overflow-hidden rounded transition-all duration-7000 p-2">
@@ -36,7 +66,7 @@ const Wrapper = ({ children }: Props) => {
                 <HeadingSection title="Home" />
 
                 <div className="flex items-center gap-3">
-                    <ButtonIcon onClick={handleMinimize} aria-label="Minimize window">
+                    <ButtonIcon onClick={handleExitFullScreen} aria-label="Minimize window">
                         <MinusIcon />
                     </ButtonIcon>
                     <ButtonIcon
@@ -45,7 +75,7 @@ const Wrapper = ({ children }: Props) => {
                     >
                         {isFullScreen ? <MinimizeIcon /> : <ExpandIcon />}
                     </ButtonIcon>
-                    <ButtonIcon onClick={handleClose} aria-label="Close window">
+                    <ButtonIcon onClick={handleExitFullScreen} aria-label="Close window">
                         <CloseIcon />
                     </ButtonIcon>
                 </div>
@@ -59,6 +89,7 @@ const Wrapper = ({ children }: Props) => {
                         href={path}
                         active={pathname === path}
                         aria-label={label}
+                        label={label}
                     >
                         <Icon />
                     </ButtonIcon>
@@ -66,7 +97,13 @@ const Wrapper = ({ children }: Props) => {
             </nav>
 
             {/* Main Content Area */}
-            <main className="overflow-y-scroll">{children}</main>
+            <main
+                ref={mainRef}
+                className="scrollbar-custom overflow-y-auto overflow-x-clip border-r border-base-300 relative"
+                style={{ "--scroll-color": color } as React.CSSProperties}
+            >
+                {children}
+            </main>
 
             {/* Bottom Left Corner */}
             <div className="border-l border-t border-b border-base-300" />

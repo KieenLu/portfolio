@@ -1,7 +1,7 @@
 .icon {
-  @apply stroke-icon cursor-pointer duration-300 hover:stroke-white;
+    @apply stroke-icon cursor-pointer duration-300 hover:stroke-white;
 }
 
 .active .icon {
-  @apply stroke-white;
+    @apply stroke-white;
 }
