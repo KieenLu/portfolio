@@ -1,21 +1,23 @@
 "use client";
 
 import gsap from "gsap";
-import { forwardRef, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
-export const ScrollLineIndicator = forwardRef((_, forwardedRef) => {
+import { usePageConcept } from "@/hooks/usePageConcept";
+
+export const ScrollLineIndicator = ({ innerRef }) => {
     const lineRef = useRef(null);
+    const { color } = usePageConcept();
 
     useEffect(() => {
         const line = lineRef.current;
         if (!line) return;
 
+        gsap.killTweensOf(line);
+
         gsap.fromTo(
             line,
-            {
-                opacity: 0,
-                scaleY: 0,
-            },
+            { opacity: 0, scaleY: 0 },
             {
                 opacity: 1,
                 scaleY: 1,
@@ -35,7 +37,10 @@ export const ScrollLineIndicator = forwardRef((_, forwardedRef) => {
         });
 
         gsap.to(line, {
-            boxShadow: "0 0 20px rgba(0, 255, 65, 0.8), 0 0 40px rgba(0, 255, 65, 0.4)",
+            boxShadow: `
+        0 0 20px ${color},
+        0 0 40px color-mix(in srgb, ${color} 40%, transparent)
+      `,
             duration: 2.5,
             repeat: -1,
             yoyo: true,
@@ -49,30 +54,30 @@ export const ScrollLineIndicator = forwardRef((_, forwardedRef) => {
             yoyo: true,
             ease: "sine.inOut",
         });
-
-        if (forwardedRef) {
-            if (typeof forwardedRef === "function") {
-                forwardedRef(line);
-            } else {
-                forwardedRef.current = line;
-            }
-        }
-    }, [forwardedRef]);
+    }, [color]);
 
     return (
         <div
-            ref={lineRef}
+            ref={(el) => {
+                lineRef.current = el;
+                if (innerRef) innerRef.current = el;
+            }}
             className="absolute bottom-16 left-1/2 transform -translate-x-1/2 h-28 z-50"
             style={{
                 width: "1px",
-                background:
-                    "linear-gradient(to bottom, transparent 0%, rgba(0, 255, 65, 0.3) 20%, #00ff41 40%, #00ff41 60%, rgba(0, 255, 65, 0.3) 80%, transparent 100%)",
+                background: `linear-gradient(
+          to bottom,
+          transparent 0%,
+          color-mix(in srgb, ${color} 30%, transparent) 20%,
+          ${color} 40%,
+          ${color} 60%,
+          color-mix(in srgb, ${color} 30%, transparent) 80%,
+          transparent 100%
+        )`,
                 borderRadius: "50px",
-                boxShadow: "0 0 6px rgba(0, 255, 65, 0.4)",
+                boxShadow: `0 0 6px color-mix(in srgb, ${color} 50%, transparent)`,
                 clipPath: "ellipse(100% 100% at 50% 50%)",
             }}
         />
     );
-});
-
-ScrollLineIndicator.displayName = "ScrollLineIndicator";
+};

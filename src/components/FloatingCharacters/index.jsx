@@ -4,7 +4,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
-import { CHARACTERS } from "./helper";
+
+import { usePageConcept } from "@/hooks/usePageConcept";
 
 const FloatingCharacters = () => {
     const mountRef = useRef(null);
@@ -14,6 +15,13 @@ const FloatingCharacters = () => {
     const mouseRef = useRef(new THREE.Vector2(0, 0));
     const cubeRenderTargetRef = useRef(null);
     const shadowTextureRef = useRef(null);
+    const requestRef = useRef();
+
+    const { floatingCharactersConfig, listCharacters } = usePageConcept();
+
+    const textColor = floatingCharactersConfig?.textColor;
+    const rimLightColor = floatingCharactersConfig?.rimLightColor;
+    const shadowOpacity = floatingCharactersConfig?.shadowOpacity;
 
     useEffect(() => {
         const scene = new THREE.Scene();
@@ -30,13 +38,11 @@ const FloatingCharacters = () => {
             alpha: true,
         });
         renderer.setClearColor(0x000000, 0);
-        // Enhanced shadow settings
         renderer.shadowMap.enabled = false;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         renderer.shadowMap.needsUpdate = true;
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.2;
         renderer.outputEncoding = THREE.sRGBEncoding;
@@ -46,18 +52,15 @@ const FloatingCharacters = () => {
 
         mountRef.current.appendChild(renderer.domElement);
 
-        // Enhanced lighting setup
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
         directionalLight.position.set(8, 15, 10);
         directionalLight.castShadow = false;
         scene.add(directionalLight);
 
-        // Add ambient light for softer shadows
         const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
         scene.add(ambientLight);
 
-        // Add rim light for better definition
-        const rimLight = new THREE.DirectionalLight(0x64a4df, 0.5);
+        const rimLight = new THREE.DirectionalLight(rimLightColor, 0.5);
         rimLight.position.set(-5, 2, -5);
         scene.add(rimLight);
 
@@ -90,7 +93,7 @@ const FloatingCharacters = () => {
                 const geometry = new TextGeometry(char, {
                     font: font,
                     size: size,
-                    height: 0.4, // Increased for better shadows
+                    height: 0.4,
                     curveSegments: 48,
                     bevelEnabled: true,
                     bevelThickness: 0.1,
@@ -99,16 +102,14 @@ const FloatingCharacters = () => {
                     bevelSegments: 6,
                 });
 
-                // Material with CubeCamera environment map
                 const material = new THREE.MeshStandardMaterial({
-                    color: 0x808080, // Gray color for the text
-                    metalness: 0.8, // Increased for better reflections
-                    roughness: 0.3, // Decreased for more reflective surface
-                    envMapIntensity: 0.6, // Increased for more visible reflections
+                    color: textColor,
+                    metalness: 0.8,
+                    roughness: 0.3,
+                    envMapIntensity: 0.6,
                 });
 
                 const textMesh = new THREE.Mesh(geometry, material);
-                // Disable shadow casting and receiving
                 textMesh.castShadow = false;
                 textMesh.receiveShadow = false;
 
@@ -125,7 +126,7 @@ const FloatingCharacters = () => {
                     new THREE.MeshBasicMaterial({
                         map: shadowTexture,
                         transparent: true,
-                        opacity: 0.4,
+                        opacity: shadowOpacity,
                         depthWrite: false,
                     })
                 );
@@ -161,12 +162,11 @@ const FloatingCharacters = () => {
             });
         };
 
-        CHARACTERS.forEach(({ char, position, size, rotation }) => {
+        listCharacters.forEach(({ char, position, size, rotation }) => {
             createText(char, position, size, rotation);
         });
 
         const clock = new THREE.Clock();
-        let frameCount = 0;
 
         const handleMouseMove = (event) => {
             const x = event.clientX / window.innerWidth;
@@ -176,10 +176,9 @@ const FloatingCharacters = () => {
         };
 
         const animate = () => {
-            requestAnimationFrame(animate);
+            requestRef.current = requestAnimationFrame(animate);
 
             const elapsedTime = clock.getElapsedTime();
-            frameCount++;
 
             textObjectsRef.current.forEach((text) => {
                 const baseX =
@@ -210,10 +209,10 @@ const FloatingCharacters = () => {
 
                     const heightDiff = finalY - -2.8;
                     const shadowScale = 1 + heightDiff * 0.15;
-                    const shadowOpacity = Math.max(0.2, 0.5 - heightDiff * 0.08);
+                    const shadowOpacityDynamic = Math.max(0.2, shadowOpacity - heightDiff * 0.08);
 
                     shadowPlane.scale.set(shadowScale, shadowScale, 1);
-                    shadowPlane.material.opacity = shadowOpacity;
+                    shadowPlane.material.opacity = shadowOpacityDynamic;
                 }
 
                 text.rotation.y +=
@@ -244,6 +243,10 @@ const FloatingCharacters = () => {
         animate();
 
         return () => {
+            if (requestRef.current) {
+                cancelAnimationFrame(requestRef.current);
+            }
+
             window.removeEventListener("resize", handleResize);
             window.removeEventListener("mousemove", handleMouseMove);
             mountRef.current?.removeChild(renderer.domElement);
@@ -263,14 +266,14 @@ const FloatingCharacters = () => {
                 shadowTextureRef.current.dispose();
             }
 
-            // Dispose CubeCamera resources
             if (cubeRenderTargetRef.current) {
                 cubeRenderTargetRef.current.dispose();
             }
 
             renderer.dispose();
+            textObjectsRef.current = [];
         };
-    }, []);
+    }, [textColor, rimLightColor, shadowOpacity, listCharacters]);
 
     return <div ref={mountRef} className="absolute inset-0 -z-10" />;
 };

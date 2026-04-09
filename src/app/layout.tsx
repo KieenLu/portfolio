@@ -5,7 +5,7 @@ import clsx from "clsx";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
-import CreativeBackground from "@/components/Background";
+import CreativeBackground from "@/components/CreativeBackground";
 import Wrapper from "@/components/Wrapper";
 
 const ppNeueMachina = localFont({

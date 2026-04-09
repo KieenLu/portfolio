@@ -1,19 +1,24 @@
-import AboutMe from "@/components/AboutMe";
-import Hero from "@/components/Hero";
+"use client";
 
-const Homepage = () => {
+import AboutMe from "@/components/AboutMe";
+import Footer from "@/components/Footer";
+import HomeBanner from "@/components/HomeBanner";
+import PersonalProject from "@/components/PersonalProeject";
+// import PreloaderScreen from "@/components/PreloaderScreen";
+
+export default function Homepage() {
     return (
         <>
-            <Hero />
+            <div className="relative w-full min-h-screen">
+                <HomeBanner />
 
-            <div className="mt-10">
-                <AboutMe />
-                <div className="text-7xl text-center text-main lg:w-6/12 h-96">content</div>
-                <div className="text-7xl text-center text-main lg:w-6/12 h-96">content</div>
-                <div className="text-7xl text-center text-main lg:w-6/12 h-96">content</div>
+                <div className="mt-10">
+                    <AboutMe />
+                    <PersonalProject />
+                </div>
+
+                <Footer />
             </div>
         </>
     );
-};
-
-export default Homepage;
+}
