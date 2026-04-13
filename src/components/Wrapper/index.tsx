@@ -22,11 +22,18 @@ interface Props {
 
 const Wrapper = ({ children }: Props) => {
     const mainRef = useRef<HTMLElement>(null);
+    const lenisRef = useRef<Lenis | null>(null);
     const pathname = usePathname();
 
     const { color } = usePageConcept();
 
     const { isFullScreen, toggleFullScreen } = useFullscreen();
+
+    const handleExitFullScreen = () => {
+        if (isFullScreen) {
+            toggleFullScreen();
+        }
+    };
 
     useEffect(() => {
         if (!mainRef.current) return;
@@ -38,23 +45,26 @@ const Wrapper = ({ children }: Props) => {
             orientation: "vertical",
             smoothWheel: true,
         });
+
+        lenisRef.current = lenis;
+
         let rafId: number;
         const raf = (time: number) => {
             lenis.raf(time);
             rafId = requestAnimationFrame(raf);
         };
         rafId = requestAnimationFrame(raf);
+
         return () => {
             cancelAnimationFrame(rafId);
             lenis.destroy();
+            lenisRef.current = null;
         };
     }, []);
 
-    const handleExitFullScreen = () => {
-        if (isFullScreen) {
-            toggleFullScreen();
-        }
-    };
+    useEffect(() => {
+        lenisRef.current?.scrollTo(0, { immediate: true });
+    }, [pathname]);
 
     return (
         <div className="relative grid h-full grid-cols-[40px_1fr] grid-rows-[40px_1fr_40px] overflow-hidden rounded transition-all duration-7000 p-2">

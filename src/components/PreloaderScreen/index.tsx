@@ -1,189 +1,169 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { bowByOneFont } from "@/constants/localFont";
 import { usePageConcept } from "@/hooks/usePageConcept";
+import { useLoaderStore } from "@/store/Loader";
+
+const TIMING = {
+    loaderBarDuration: 1.2,
+    loader2Delay: 0.7,
+    revealStart: 2,
+    scaleStart: 3.0,
+    fadeStart: 3.4,
+} as const;
 
 export default function PreloaderScreen() {
-    const loadingScreenRef = useRef<HTMLDivElement>(null);
-    const loaderRef = useRef<HTMLDivElement>(null);
+    const hasAppBeenLoaded = useLoaderStore((state) => state.hasAppBeenLoaded);
+    const setAppLoaded = useLoaderStore((state) => state.setAppLoaded);
+
+    const [shouldRender, setShouldRender] = useState(false);
+    const { color } = usePageConcept();
+    const containerRef = useRef<HTMLDivElement>(null);
+
     const loader1Ref = useRef<HTMLDivElement>(null);
     const loader2Ref = useRef<HTMLDivElement>(null);
-    const counter3Ref = useRef<HTMLDivElement>(null);
-    const counter2Ref = useRef<HTMLDivElement>(null);
-    const counter1Ref = useRef<HTMLDivElement>(null);
-
-    const { color } = usePageConcept();
+    const loaderParentRef = useRef<HTMLDivElement>(null);
+    const counterElRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const counter3 = counter3Ref.current;
-        if (!counter3) return;
-
-        function animate(counter: HTMLElement | null, duration: number, delay = 0) {
-            if (!counter) return;
-            const numEl = counter.querySelector<HTMLElement>(".num");
-            const numHeight = numEl?.clientHeight ?? 100;
-            const totalDistance = (counter.querySelectorAll(".num").length - 1) * numHeight;
-            gsap.to(counter, {
-                y: -totalDistance,
-                duration,
-                delay,
-                ease: "power2.inOut",
-            });
+        if (!hasAppBeenLoaded) {
+            setShouldRender(true);
         }
+    }, [hasAppBeenLoaded]);
 
-        animate(counter3Ref.current, 7);
-        animate(counter2Ref.current, 8);
-        animate(counter1Ref.current, 2, 6);
+    useGSAP(
+        () => {
+            if (!shouldRender) return;
 
-        gsap.to(".digit", {
-            top: "-150px",
-            stagger: { amount: 0.25 },
-            delay: 8,
-            duration: 1,
-            ease: "power4.inOut",
-        });
+            const tl = gsap.timeline();
 
-        gsap.to(loader1Ref.current, {
-            width: 200,
-            duration: 6,
-            ease: "power2.inOut",
-        });
-        gsap.to(loader2Ref.current, {
-            width: 100,
-            duration: 6,
-            delay: 1.9,
-            ease: "power2.inOut",
-        });
-
-        gsap.to(loaderRef.current, {
-            background: "none",
-            delay: 8,
-            duration: 0.1,
-        });
-        gsap.to(loader1Ref.current, {
-            rotate: 90,
-            y: -50,
-            duration: 0.5,
-            delay: 8,
-        });
-        gsap.to(loader2Ref.current, { x: -75, y: 75, duration: 0.5, delay: 8 });
-        gsap.to(loaderRef.current, {
-            scale: 40,
-            duration: 1,
-            delay: 9,
-            ease: "power2.inOut",
-        });
-        gsap.to(loaderRef.current, {
-            rotate: 45,
-            y: 500,
-            x: 2000,
-            duration: 1,
-            delay: 9,
-            ease: "power2.inOut",
-        });
-        gsap.to(loadingScreenRef.current, {
-            opacity: 0,
-            duration: 0.5,
-            delay: 9.5,
-            ease: "power1.inOut",
-            onComplete: () => {
-                if (loadingScreenRef.current) {
-                    loadingScreenRef.current.style.display = "none";
+            const generateRandomSteps = (total = 100) => {
+                const steps = [0];
+                while (steps[steps.length - 1] < total) {
+                    const jump = Math.floor(Math.random() * 10) + 1;
+                    steps.push(Math.min(steps[steps.length - 1] + jump, total));
                 }
-            },
-        });
-    }, []);
+                return steps;
+            };
+
+            const steps = generateRandomSteps();
+            const counter = { value: 0 };
+            const stepDuration = (TIMING.revealStart - 0.5) / steps.length;
+
+            tl.to(
+                counter,
+                {
+                    keyframes: steps.map((v) => ({
+                        value: v,
+                        duration: stepDuration,
+                        ease: "steps(1, end)",
+                    })),
+                    onUpdate: () => {
+                        if (counterElRef.current) {
+                            const v = Math.round(counter.value);
+                            counterElRef.current.textContent = v > 0 ? String(v) : "";
+                        }
+                    },
+                },
+                0
+            );
+
+            // Loading bar animation
+            tl.fromTo(
+                loader1Ref.current,
+                { width: 0 },
+                { width: 200, duration: TIMING.loaderBarDuration, ease: "power2.inOut" },
+                0
+            );
+            tl.fromTo(
+                loader2Ref.current,
+                { width: 0 },
+                { width: 100, duration: TIMING.loaderBarDuration, ease: "power2.inOut" },
+                TIMING.loader2Delay
+            );
+
+            // Reveal & Outro
+            tl.to(
+                counterElRef.current,
+                { y: -120, opacity: 0, duration: 0.6, ease: "power4.inOut" },
+                TIMING.revealStart
+            );
+            tl.to(
+                loaderParentRef.current,
+                { background: "none", duration: 0.1 },
+                TIMING.revealStart
+            );
+            tl.to(loader1Ref.current, { rotate: 90, y: -50, duration: 0.5 }, TIMING.revealStart);
+            tl.to(loader2Ref.current, { x: -75, y: 75, duration: 0.5 }, TIMING.revealStart);
+
+            tl.to(
+                loaderParentRef.current,
+                { scale: 40, rotate: 45, y: 500, x: 2000, duration: 1, ease: "power2.inOut" },
+                TIMING.scaleStart
+            );
+
+            tl.to(
+                containerRef.current,
+                {
+                    opacity: 0,
+                    duration: 0.4,
+                    ease: "power1.inOut",
+                    onComplete: () => {
+                        setShouldRender(false);
+                        setAppLoaded();
+                    },
+                },
+                TIMING.fadeStart
+            );
+        },
+        { dependencies: [shouldRender, color], scope: containerRef }
+    );
+
+    if (!shouldRender) return null;
 
     return (
         <div
-            ref={loadingScreenRef}
-            className="fixed inset-0 z-50 w-full h-full bg-black text-white pointer-events-none"
+            ref={containerRef}
+            className={`fixed inset-0 z-[100] w-full h-full bg-black text-white pointer-events-none `}
         >
             <div
-                ref={loaderRef}
+                ref={loaderParentRef}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex"
-                style={{ width: "300px", height: "50px", background: "rgb(80,80,80)" }}
+                style={{ width: 300, height: 50, background: "rgb(80,80,80)" }}
             >
                 <div
                     ref={loader1Ref}
-                    style={{
-                        position: "relative",
-                        background: color,
-                        width: "0px",
-                        height: "50px",
-                    }}
+                    style={{ position: "relative", background: color, width: 0, height: 50 }}
                 />
                 <div
                     ref={loader2Ref}
-                    style={{
-                        position: "relative",
-                        background: color,
-                        width: "0px",
-                        height: "50px",
-                    }}
+                    style={{ position: "relative", background: color, width: 0, height: 50 }}
                 />
             </div>
 
             <div
-                className="fixed left-[50px] bottom-[50px] flex h-[100px] overflow-hidden"
+                className="fixed right-[50px] bottom-[50px] overflow-hidden"
                 style={{
-                    fontSize: "100px",
-                    lineHeight: "102px",
-                    fontWeight: 400,
-                    clipPath: "polygon(0 0, 100% 0, 100% 100px, 0 100px)",
+                    fontSize: 400,
+                    lineHeight: "400px",
+                    clipPath: "polygon(0 0, 100% 0, 100% 440px, 0 440px)",
                 }}
             >
-                <div ref={counter1Ref} className="digit relative" style={{ top: "8px" }}>
-                    <div className="num" style={{ height: "100px", lineHeight: "102px" }}>
-                        0
-                    </div>
-                    <div
-                        className="num"
-                        style={{
-                            height: "100px",
-                            lineHeight: "102px",
-                            position: "relative",
-                            right: "-12px",
-                        }}
-                    >
-                        1
-                    </div>
-                </div>
-
-                <div ref={counter2Ref} className="digit relative" style={{ top: "8px" }}>
-                    {["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"].map((n, i) => (
-                        <div
-                            key={i}
-                            className="num"
-                            style={{
-                                height: "100px",
-                                lineHeight: "102px",
-                                ...(i === 1 ? { position: "relative", right: "-10px" } : {}),
-                            }}
-                        >
-                            {n}
-                        </div>
-                    ))}
-                </div>
-
-                <div ref={counter3Ref} className="digit relative" style={{ top: "8px" }}>
-                    {[...Array(2)].flatMap((_, i) =>
-                        [...Array(10)].map((_, j) => (
-                            <div
-                                key={`${i}-${j}`}
-                                className="num"
-                                style={{ height: "100px", lineHeight: "102px" }}
-                            >
-                                {j}
-                            </div>
-                        ))
-                    )}
-                    <div className="num" style={{ height: "100px", lineHeight: "102px" }}>
-                        0
-                    </div>
-                </div>
+                <div
+                    ref={counterElRef}
+                    style={{
+                        height: 400,
+                        lineHeight: "400px",
+                        fontWeight: "bold",
+                        fontFamily: bowByOneFont.style.fontFamily,
+                        color: "#b0b0b0",
+                        letterSpacing: "-4px",
+                    }}
+                />
             </div>
         </div>
     );

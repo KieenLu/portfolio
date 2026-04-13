@@ -1,6 +1,7 @@
 "use client";
 
 import gsap from "gsap";
+import { useRouter } from "next/navigation";
 import { useRef } from "react";
 
 import { usePageConcept } from "@/hooks/usePageConcept";
@@ -12,6 +13,8 @@ interface Props {
 }
 
 export default function ButtonHover({ label = "about-me", href, onClick }: Props) {
+    const router = useRouter();
+
     const fillRef = useRef<HTMLSpanElement>(null);
     const charsRef = useRef<HTMLSpanElement[]>([]);
     const arrowRef = useRef<HTMLSpanElement>(null);
@@ -84,12 +87,14 @@ export default function ButtonHover({ label = "about-me", href, onClick }: Props
         });
     };
 
-    const Tag = href ? "a" : "button";
+    const handleClick = () => {
+        if (onClick) onClick();
+        if (href) router.push(href);
+    };
 
     return (
-        <Tag
-            {...(href ? { href } : {})}
-            onClick={onClick}
+        <button
+            onClick={handleClick}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             className="hover-button relative inline-flex items-center gap-[0.3em] px-6 py-4 cursor-pointer font-mono text-xs tracking-widest select-none whitespace-nowrap"
@@ -150,6 +155,6 @@ export default function ButtonHover({ label = "about-me", href, onClick }: Props
                     →
                 </span>
             </span>
-        </Tag>
+        </button>
     );
 }
