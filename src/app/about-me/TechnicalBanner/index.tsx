@@ -24,7 +24,6 @@ import IconZustand from "@/assets/icons/i-zustand.svg";
 import DraggableWindow from "@/components/DraggableWindow";
 import TechSkillItem from "@/components/TechSkillItem";
 import TitleSection from "@/components/TitleSection";
-import { usePageConcept } from "@/hooks/usePageConcept";
 
 type SvgIcon = React.FC<React.SVGProps<SVGSVGElement>>;
 type Variant = "core" | "interactive" | "exploring";
@@ -57,9 +56,6 @@ const TECH_LIST: TechItem[] = [
 
 const TechnicalBanner = () => {
     const itemsRef = useRef<HTMLDivElement[]>([]);
-
-    const { color } = usePageConcept();
-    console.log("🚀 >> TechnicalBanner >> color:", color);
 
     const handleRevealComplete = () => {
         const items = itemsRef.current.filter(Boolean);

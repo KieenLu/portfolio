@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 
 import CreativeBackground from "@/components/CreativeBackground";
+import PreloaderScreen from "@/components/PreloaderScreen";
 import Wrapper from "@/components/Wrapper";
 
 const ppNeueMachina = localFont({
@@ -35,6 +36,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={clsx(ppNeueMachina.className, "relative h-dvh overflow-hidden")}>
+                <PreloaderScreen />
                 <CreativeBackground />
 
                 <Wrapper>{children}</Wrapper>
