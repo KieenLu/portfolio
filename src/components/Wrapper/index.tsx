@@ -48,6 +48,8 @@ const Wrapper = ({ children }: Props) => {
 
         lenisRef.current = lenis;
 
+        lenis.scrollTo(0, { immediate: true });
+
         let rafId: number;
         const raf = (time: number) => {
             lenis.raf(time);
@@ -60,10 +62,6 @@ const Wrapper = ({ children }: Props) => {
             lenis.destroy();
             lenisRef.current = null;
         };
-    }, []);
-
-    useEffect(() => {
-        lenisRef.current?.scrollTo(0, { immediate: true });
     }, [pathname]);
 
     return (

@@ -10,8 +10,7 @@ const BriefAboutContent = () => {
             <div className="mb-3">
                 <span className="text-gray-500">2. </span>I&apos;m specialized in{" "}
                 <span className="text-blue-400">React</span>,{" "}
-                <span className="text-cyan-400">Next.js</span>, and{" "}
-                <span className="text-purple-400">UI animations</span>, focusing on creating{" "}
+                <span className="text-cyan-400">Next.js</span>, focusing on creating{" "}
                 <span className="text-green-400">fast</span>,{" "}
                 <span className="text-green-400">smooth</span>, and{" "}
                 <span className="text-green-400">engaging</span> user interfaces.
