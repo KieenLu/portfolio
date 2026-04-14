@@ -22,7 +22,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
         <>
             <div
                 ref={overlayRef}
-                className="fixed inset-0 z-[90] bg-black pointer-events-none"
+                className="fixed inset-0 z-[9998] bg-black pointer-events-auto select-none"
                 style={{ transformOrigin: "top" }}
             />
             {children}

@@ -16,6 +16,15 @@ const TIMING = {
     fadeStart: 3.4,
 } as const;
 
+const generateRandomSteps = (total = 100) => {
+    const steps = [0];
+    while (steps[steps.length - 1] < total) {
+        const jump = Math.floor(Math.random() * 10) + 1;
+        steps.push(Math.min(steps[steps.length - 1] + jump, total));
+    }
+    return steps;
+};
+
 export default function PreloaderScreen() {
     const hasAppBeenLoaded = useLoaderStore((state) => state.hasAppBeenLoaded);
     const setAppLoaded = useLoaderStore((state) => state.setAppLoaded);
@@ -40,15 +49,6 @@ export default function PreloaderScreen() {
             if (!shouldRender) return;
 
             const tl = gsap.timeline();
-
-            const generateRandomSteps = (total = 100) => {
-                const steps = [0];
-                while (steps[steps.length - 1] < total) {
-                    const jump = Math.floor(Math.random() * 10) + 1;
-                    steps.push(Math.min(steps[steps.length - 1] + jump, total));
-                }
-                return steps;
-            };
 
             const steps = generateRandomSteps();
             const counter = { value: 0 };
@@ -102,7 +102,7 @@ export default function PreloaderScreen() {
 
             tl.to(
                 loaderParentRef.current,
-                { scale: 40, rotate: 45, y: 500, x: 2000, duration: 1, ease: "power2.inOut" },
+                { scale: 40, rotate: 45, y: 500, x: 2000, duration: 0.8, ease: "power2.inOut" },
                 TIMING.scaleStart
             );
 
@@ -128,7 +128,7 @@ export default function PreloaderScreen() {
     return (
         <div
             ref={containerRef}
-            className={`fixed inset-0 z-[100] w-full h-full bg-black text-white pointer-events-none `}
+            className={`fixed inset-0 z-[9999] w-full h-full bg-black text-white pointer-events-auto select-none `}
         >
             <div
                 ref={loaderParentRef}

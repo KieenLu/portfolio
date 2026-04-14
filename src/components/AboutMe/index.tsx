@@ -5,6 +5,7 @@ import { useRef } from "react";
 
 import { PATH } from "@/constants/path";
 import { useWindowLayout } from "@/hooks/useDraggableWindowLauyout";
+import { usePageConcept } from "@/hooks/usePageConcept";
 
 import ButtonHover from "../ButtonHover";
 import DraggableWindow from "../DraggableWindow";
@@ -21,6 +22,8 @@ const AboutMe = () => {
         "contact-me": useRef<HTMLDivElement>(null),
         hobbies: useRef<HTMLDivElement>(null),
     };
+
+    const { color } = usePageConcept();
 
     const pathname = usePathname();
     const renderLayouts = CONCEPTS[pathname].layout ?? LAYOUT_ABOUT_ME;
@@ -104,7 +107,10 @@ const AboutMe = () => {
                         initialPosition={pos?.["contact-me"] ?? { x: 0, y: 0 }}
                         maxWidth={renderLayouts["contact-me"].maxWidth}
                     >
-                        <div className="font-mono text-base leading-relaxed">
+                        <div
+                            className="font-mono text-base leading-relaxed"
+                            style={{ "--hover-color": color } as React.CSSProperties}
+                        >
                             {CONTACT_ME_LIST.map((item) => (
                                 <a
                                     key={item.name}
@@ -112,7 +118,9 @@ const AboutMe = () => {
                                     href={item.link}
                                     className="mb-3 flex items-center gap-4 w-max hover:cursor-pointer transition-colors"
                                 >
-                                    <span className="text-gray-300 hover:color-main duration-300">
+                                    <span
+                                        className={`text-gray-300 hover:[color:var(--hover-color)] duration-300`}
+                                    >
                                         {CONTACT_ME_LIST.indexOf(item) + 1}. {item.name}
                                     </span>
                                     {item.icon && (

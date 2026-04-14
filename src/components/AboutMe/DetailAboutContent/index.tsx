@@ -2,13 +2,13 @@ const DetailAboutContent = () => {
     return (
         <div className="font-mono text-base text-gray-200 leading-7">
             <p>
-                1 Hi, I&apos;m <span className="text-green-400">Kien</span>, a
+                1. Hi, I&apos;m <span className="text-green-400">Kien</span>, a
                 <span className="text-blue-400"> Front-End Developer</span> with a strong focus on
                 building modern, scalable, and user-centric web applications.
             </p>
 
             <p>
-                2 I have professional experience working in
+                2. I have professional experience working in
                 <span className="text-pink-400"> insurance</span> and
                 <span className="text-purple-400"> fintech domains</span>, where I’ve been involved
                 in developing systems that handle
@@ -17,7 +17,7 @@ const DetailAboutContent = () => {
             </p>
 
             <p>
-                Beyond frontend, I also have hands-on experience with
+                3. Beyond frontend, I also have hands-on experience with
                 <span className="text-green-400"> backend development </span>
                 (using <span className="text-blue-400"> NestJS</span>) and exposure to
                 <span className="text-yellow-400"> mobile development</span>, which allows me to
@@ -27,7 +27,7 @@ const DetailAboutContent = () => {
             </p>
 
             <p>
-                4 I strive to deliver products that are
+                4. I strive to deliver products that are
                 <span className="text-purple-400"> visually compelling </span>
                 by collaborating closely with designers, while also ensuring the codebase is
                 <span className="text-green-400"> clean</span>,
@@ -39,7 +39,7 @@ const DetailAboutContent = () => {
             </p>
 
             <p>
-                5 For me, growth is a continuous journey — I always aim to be
+                5. For me, growth is a continuous journey — I always aim to be
                 <span className="text-green-400"> better than I was yesterday</span>. I actively
                 invest time in learning new technologies, improving problem-solving skills, and
                 exploring areas like
