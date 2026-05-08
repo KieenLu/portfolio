@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 
+import { useDevice } from "@/hooks/useDevice";
 import { usePageConcept } from "@/hooks/usePageConcept";
 
 const FloatingCharacters = () => {
@@ -13,11 +14,11 @@ const FloatingCharacters = () => {
     const rendererRef = useRef(null);
     const textObjectsRef = useRef([]);
     const mouseRef = useRef(new THREE.Vector2(0, 0));
-    const cubeRenderTargetRef = useRef(null);
     const shadowTextureRef = useRef(null);
     const requestRef = useRef();
 
     const { floatingCharactersConfig, listCharacters } = usePageConcept();
+    const { device, width, height } = useDevice();
 
     const textColor = floatingCharactersConfig?.textColor;
     const rimLightColor = floatingCharactersConfig?.rimLightColor;
@@ -26,25 +27,16 @@ const FloatingCharacters = () => {
     useEffect(() => {
         const scene = new THREE.Scene();
 
-        const camera = new THREE.PerspectiveCamera(
-            75,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            1000
-        );
+        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
 
         const renderer = new THREE.WebGLRenderer({
             antialias: true,
             alpha: true,
         });
         renderer.setClearColor(0x000000, 0);
-        renderer.shadowMap.enabled = false;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.shadowMap.needsUpdate = true;
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(width, height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.2;
         renderer.outputEncoding = THREE.sRGBEncoding;
 
         sceneRef.current = scene;
@@ -54,7 +46,6 @@ const FloatingCharacters = () => {
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
         directionalLight.position.set(8, 15, 10);
-        directionalLight.castShadow = false;
         scene.add(directionalLight);
 
         const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
@@ -64,7 +55,21 @@ const FloatingCharacters = () => {
         rimLight.position.set(-5, 2, -5);
         scene.add(rimLight);
 
-        camera.position.set(0, 0, 12);
+        const updateCameraZ = () => {
+            const aspect = width / height;
+            const targetAspect = 16 / 9;
+
+            let baseZ = 12;
+            if (device === "tablet") baseZ = 13.5;
+            if (device === "mobile") baseZ = 15;
+
+            if (aspect < targetAspect) {
+                camera.position.z = baseZ * (targetAspect / aspect) * 0.9;
+            } else {
+                camera.position.z = baseZ;
+            }
+        };
+        updateCameraZ();
 
         const loader = new FontLoader();
 
@@ -73,32 +78,49 @@ const FloatingCharacters = () => {
             canvas.width = 128;
             canvas.height = 128;
             const ctx = canvas.getContext("2d");
-
             const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
             gradient.addColorStop(0, "rgba(0, 0, 0, 0.5)");
-            gradient.addColorStop(0.5, "rgba(0, 0, 0, 0.2)");
             gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
-
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, 128, 128);
-
             return new THREE.CanvasTexture(canvas);
         };
 
         const shadowTexture = createFakeShadowTexture();
         shadowTextureRef.current = shadowTexture;
 
-        const createText = (char, position, size, rotation) => {
+        const createText = (charData) => {
+            const {
+                char,
+                position,
+                tabletPosition,
+                mobilePosition,
+                size,
+                tabletSize,
+                mobileSize,
+                rotation,
+            } = charData;
+
+            let finalSize = size;
+            let finalPos = position;
+
+            if (device === "tablet") {
+                finalSize = tabletSize || size;
+                finalPos = tabletPosition || position;
+            } else if (device === "mobile") {
+                finalSize = mobileSize || size;
+                finalPos = mobilePosition || position;
+            }
+
             loader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
                 const geometry = new TextGeometry(char, {
                     font: font,
-                    size: size,
+                    size: finalSize,
                     height: 0.4,
                     curveSegments: 48,
                     bevelEnabled: true,
                     bevelThickness: 0.1,
                     bevelSize: 0.04,
-                    bevelOffset: 0,
                     bevelSegments: 6,
                 });
 
@@ -110,19 +132,14 @@ const FloatingCharacters = () => {
                 });
 
                 const textMesh = new THREE.Mesh(geometry, material);
-                textMesh.castShadow = false;
-                textMesh.receiveShadow = false;
-
-                textMesh.position.set(position.x, position.y, position.z);
+                textMesh.position.set(finalPos.x, finalPos.y, finalPos.z);
 
                 if (rotation) {
-                    textMesh.rotation.x = rotation.x;
-                    textMesh.rotation.y = rotation.y;
-                    textMesh.rotation.z = rotation.z;
+                    textMesh.rotation.set(rotation.x, rotation.y, rotation.z);
                 }
 
                 const shadowPlane = new THREE.Mesh(
-                    new THREE.PlaneGeometry(size * 1.5, size * 1.5),
+                    new THREE.PlaneGeometry(finalSize * 1.5, finalSize * 1.5),
                     new THREE.MeshBasicMaterial({
                         map: shadowTexture,
                         transparent: true,
@@ -130,16 +147,15 @@ const FloatingCharacters = () => {
                         depthWrite: false,
                     })
                 );
-
                 shadowPlane.rotation.x = -Math.PI / 2;
-                shadowPlane.position.set(position.x, -2.8, position.z);
+                shadowPlane.position.set(finalPos.x, -2.8, finalPos.z);
 
                 geometry.computeBoundingBox();
                 const centerOffset = geometry.boundingBox.getCenter(new THREE.Vector3());
                 textMesh.geometry.translate(-centerOffset.x, -centerOffset.y, -centerOffset.z);
 
                 textMesh.userData = {
-                    originalPosition: { ...position },
+                    originalPosition: { ...finalPos },
                     floatSpeedY: 0.3 + Math.random() * 0.2,
                     floatAmountY: 0.2 + Math.random() * 0.1,
                     floatOffsetY: Math.random() * Math.PI * 2,
@@ -162,118 +178,72 @@ const FloatingCharacters = () => {
             });
         };
 
-        listCharacters.forEach(({ char, position, size, rotation }) => {
-            createText(char, position, size, rotation);
-        });
+        listCharacters.forEach((charData) => createText(charData));
 
         const clock = new THREE.Clock();
-
         const handleMouseMove = (event) => {
-            const x = event.clientX / window.innerWidth;
-            const y = event.clientY / window.innerHeight;
-            mouseRef.current.x = x * 2 - 1;
-            mouseRef.current.y = -(y * 2 - 1);
+            mouseRef.current.x = (event.clientX / width) * 2 - 1;
+            mouseRef.current.y = -(event.clientY / height) * 2 + 1;
         };
 
         const animate = () => {
             requestRef.current = requestAnimationFrame(animate);
-
             const elapsedTime = clock.getElapsedTime();
 
             textObjectsRef.current.forEach((text) => {
+                const ud = text.userData;
                 const baseX =
-                    text.userData.originalPosition.x +
-                    Math.sin(elapsedTime * text.userData.floatSpeedX + text.userData.floatOffsetX) *
-                        text.userData.floatAmountX;
-
+                    ud.originalPosition.x +
+                    Math.sin(elapsedTime * ud.floatSpeedX + ud.floatOffsetX) * ud.floatAmountX;
                 const baseY =
-                    text.userData.originalPosition.y +
-                    Math.sin(elapsedTime * text.userData.floatSpeedY + text.userData.floatOffsetY) *
-                        text.userData.floatAmountY;
-
+                    ud.originalPosition.y +
+                    Math.sin(elapsedTime * ud.floatSpeedY + ud.floatOffsetY) * ud.floatAmountY;
                 const baseZ =
-                    text.userData.originalPosition.z +
-                    Math.sin(elapsedTime * text.userData.floatSpeedZ + text.userData.floatOffsetZ) *
-                        text.userData.floatAmountZ;
+                    ud.originalPosition.z +
+                    Math.sin(elapsedTime * ud.floatSpeedZ + ud.floatOffsetZ) * ud.floatAmountZ;
 
-                const mouseEffect = text.userData.mouseSensitivity;
-                const finalX = baseX + mouseRef.current.x * mouseEffect;
-                const finalY = baseY + mouseRef.current.y * mouseEffect;
+                const finalX = baseX + mouseRef.current.x * ud.mouseSensitivity;
+                const finalY = baseY + mouseRef.current.y * ud.mouseSensitivity;
 
                 text.position.set(finalX, finalY, baseZ);
 
-                const shadowPlane = text.userData.shadowPlane;
-                if (shadowPlane) {
-                    shadowPlane.position.x = finalX;
-                    shadowPlane.position.z = baseZ;
-
+                if (ud.shadowPlane) {
+                    ud.shadowPlane.position.x = finalX;
+                    ud.shadowPlane.position.z = baseZ;
                     const heightDiff = finalY - -2.8;
-                    const shadowScale = 1 + heightDiff * 0.15;
-                    const shadowOpacityDynamic = Math.max(0.2, shadowOpacity - heightDiff * 0.08);
-
-                    shadowPlane.scale.set(shadowScale, shadowScale, 1);
-                    shadowPlane.material.opacity = shadowOpacityDynamic;
+                    ud.shadowPlane.material.opacity = Math.max(
+                        0.1,
+                        shadowOpacity - heightDiff * 0.08
+                    );
                 }
 
-                text.rotation.y +=
-                    text.userData.rotateDirection *
-                    text.userData.rotateAmount *
-                    text.userData.rotateSpeed;
-
-                if (Math.abs(text.rotation.y) > text.userData.rotateAmount) {
-                    text.userData.rotateDirection *= -1;
-                }
+                text.rotation.y += ud.rotateDirection * ud.rotateAmount * ud.rotateSpeed;
+                if (Math.abs(text.rotation.y) > ud.rotateAmount) ud.rotateDirection *= -1;
             });
 
             renderer.render(scene, camera);
         };
 
-        const handleResize = () => {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-            renderer.setSize(width, height);
-        };
-
-        window.addEventListener("resize", handleResize);
         window.addEventListener("mousemove", handleMouseMove);
-
         animate();
 
         return () => {
-            if (requestRef.current) {
-                cancelAnimationFrame(requestRef.current);
-            }
-
-            window.removeEventListener("resize", handleResize);
             window.removeEventListener("mousemove", handleMouseMove);
+            if (requestRef.current) cancelAnimationFrame(requestRef.current);
             mountRef.current?.removeChild(renderer.domElement);
 
-            textObjectsRef.current.forEach((text) => {
-                text.geometry.dispose();
-                text.material.dispose();
-
-                if (text.userData.shadowPlane) {
-                    text.userData.shadowPlane.geometry.dispose();
-                    text.userData.shadowPlane.material.dispose();
-                    scene.remove(text.userData.shadowPlane);
+            textObjectsRef.current.forEach((t) => {
+                t.geometry.dispose();
+                t.material.dispose();
+                if (t.userData.shadowPlane) {
+                    t.userData.shadowPlane.geometry.dispose();
+                    t.userData.shadowPlane.material.dispose();
                 }
             });
-
-            if (shadowTextureRef.current) {
-                shadowTextureRef.current.dispose();
-            }
-
-            if (cubeRenderTargetRef.current) {
-                cubeRenderTargetRef.current.dispose();
-            }
-
             renderer.dispose();
             textObjectsRef.current = [];
         };
-    }, [textColor, rimLightColor, shadowOpacity, listCharacters]);
+    }, [device, textColor, rimLightColor, shadowOpacity, listCharacters, width, height]);
 
     return <div ref={mountRef} className="absolute inset-0 -z-10" />;
 };

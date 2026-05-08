@@ -1,9 +1,12 @@
 "use client";
 
 import gsap from "gsap";
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 
-interface ProjectHighlightProps {
+import { useDevice } from "@/hooks/useDevice";
+
+interface Props {
     index: number;
     title: string;
     year: string | number;
@@ -31,7 +34,7 @@ export default function ProjectHighlight({
     imageSrc = "/project-preview.png",
     imageAlt,
     href = "#",
-}: ProjectHighlightProps) {
+}: Props) {
     const cardRef = useRef<HTMLAnchorElement>(null);
     const leftRef = useRef<HTMLDivElement>(null);
     const rightRef = useRef<HTMLDivElement>(null);
@@ -43,7 +46,13 @@ export default function ProjectHighlight({
     const cardTl = useRef<gsap.core.Timeline | null>(null);
     const fanTl = useRef<gsap.core.Timeline | null>(null);
 
+    const { device } = useDevice();
+
+    const isDesktop = device === "desktop";
+
     useEffect(() => {
+        if (!isDesktop) return;
+
         gsap.set(mockupRef.current, {
             scale: 0.65,
             opacity: 0,
@@ -59,6 +68,8 @@ export default function ProjectHighlight({
     }, []);
 
     const handleCardEnter = () => {
+        if (!isDesktop) return;
+
         cardTl.current?.kill();
         cardTl.current = gsap.timeline();
 
@@ -80,6 +91,8 @@ export default function ProjectHighlight({
     };
 
     const handleCardLeave = () => {
+        if (!isDesktop) return;
+
         cardTl.current?.kill();
         fanTl.current?.kill();
         cardTl.current = gsap.timeline();
@@ -116,6 +129,8 @@ export default function ProjectHighlight({
     };
 
     const handleImageEnter = () => {
+        if (!isDesktop) return;
+
         fanTl.current?.kill();
         fanTl.current = gsap.timeline();
 
@@ -136,6 +151,8 @@ export default function ProjectHighlight({
     };
 
     const handleImageLeave = () => {
+        if (!isDesktop) return;
+
         fanTl.current?.kill();
         fanTl.current = gsap.timeline();
 
@@ -156,13 +173,13 @@ export default function ProjectHighlight({
     const padIndex = String(index).padStart(2, "0");
 
     return (
-        <a
+        <Link
             ref={cardRef}
             onMouseEnter={handleCardEnter}
             onMouseLeave={handleCardLeave}
             href={href}
             target="_blank"
-            className="relative flex items-center w-full rounded-sm border border-white/[0.2] px-10 h-64 cursor-pointer"
+            className="relative flex flex-col md:flex-row lg:items-center md:items-end items-start w-full rounded-sm border border-white/[0.3] lg:px-10 lg:h-72 md:h-80 h-64 cursor-pointer p-6 md:p-8"
             style={{
                 backgroundColor: "rgba(0,0,0,0.3)",
                 transition: "background-color 0.3s, border-color 0.3s",
@@ -170,18 +187,18 @@ export default function ProjectHighlight({
         >
             <div
                 ref={mockupRef}
-                className="pointer-events-auto absolute z-20"
+                className="pointer-events-auto absolute z-20 w-[520px] top-[-5px] h-[300px] right-[15%] hidden xl:block"
                 style={{
-                    left: "38%",
-                    right: "15%",
-                    bottom: "-5px",
-                    height: "calc(100% + 10px)",
+                    aspectRatio: "2/1",
                     transformOrigin: "50% 50%",
                 }}
                 onMouseEnter={handleImageEnter}
                 onMouseLeave={handleImageLeave}
             >
-                <div className="absolute inset-0" style={{ zIndex: 1, contain: "layout style" }}>
+                <div
+                    className="hidden xl:block absolute inset-0"
+                    style={{ zIndex: 1, contain: "layout style" }}
+                >
                     {Array.from({ length: LAYER_COUNT })
                         .map((_, i) => i)
                         .reverse()
@@ -221,13 +238,47 @@ export default function ProjectHighlight({
                 </div>
             </div>
 
-            <div ref={leftRef} className="z-10 flex items-start gap-4 flex-1 min-w-0">
-                <span ref={indexRef} className="mt-[6px] text-xs font-mono text-white/25">
-                    {padIndex}
+            <div
+                className="block md:hidden z-20 absolute top-0 right-[50%] translate-x-[50%] translate-y-[-50%]"
+                style={{ aspectRatio: "16/9", width: "calc(100% - 30px)" }}
+            >
+                <img
+                    src={imageSrc}
+                    alt={imageAlt ?? title}
+                    className="w-full h-full object-contain"
+                    style={{ display: "block", transform: "none" }}
+                />
+            </div>
+
+            <div className="hidden md:block xl:hidden pointer-events-auto absolute z-20 w-[420px] top-[-60px] h-[230px] right-[5%] rotate-[-2deg]">
+                <img
+                    src={imageSrc}
+                    alt={imageAlt ?? title}
+                    className="w-full h-full"
+                    style={{ display: "block", transform: "none" }}
+                />
+            </div>
+
+            <div className="flex md:hidden justify-between w-full mb-3 items-center z-10">
+                <span className="text-sm font-mono text-white/65">{padIndex}</span>
+                <span className="text-sm text-white/80">{year}</span>
+            </div>
+
+            <div
+                ref={leftRef}
+                className="z-10 flex items-end md:items-start gap-4 flex-1 min-w-0 w-full"
+            >
+                <span
+                    ref={indexRef}
+                    className="hidden md:block mt-[6px] text-xs font-mono text-white/65"
+                >
+                    {padIndex}.
                 </span>
 
-                <div className="flex flex-col gap-3 min-w-0">
-                    <h2 className="font-black text-white text-3xl whitespace-nowrap">{title}</h2>
+                <div className="flex flex-col gap-3 min-w-0 w-full">
+                    <h2 className="font-black text-white text-2xl md:text-3xl whitespace-normal md:whitespace-nowrap">
+                        {title}
+                    </h2>
 
                     <div className="flex flex-wrap gap-2">
                         {tags.map((tag) => (
@@ -238,7 +289,7 @@ export default function ProjectHighlight({
                                     lineHeight: "1",
                                 }}
                                 key={tag}
-                                className="rounded-full border border-white/[0.15] lowercase text-[11px] text-white/45"
+                                className="rounded-full border border-white/[0.25] lowercase text-[11px] text-white/65"
                             >
                                 {tag}
                             </span>
@@ -247,10 +298,10 @@ export default function ProjectHighlight({
                 </div>
             </div>
 
-            <div ref={rightRef} className="z-10 flex-shrink-0 ml-6">
+            <div ref={rightRef} className="hidden md:flex z-10 flex-shrink-0 ml-6">
                 <div
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-sm text-white/40 hover:text-white/80"
+                    className="flex items-center gap-1.5 text-sm text-white/80 hover:text-white/80"
                     onClick={(e) => e.stopPropagation()}
                 >
                     {year}
@@ -261,6 +312,6 @@ export default function ProjectHighlight({
                     </span>
                 </div>
             </div>
-        </a>
+        </Link>
     );
 }

@@ -10,6 +10,7 @@ import {
     ImageProjectShopper,
     ImageProjectWooder,
 } from "@/assets/images";
+import { useLenisStore } from "@/store/Lenis";
 
 import ProjectHighlight from "../ProjectHightlightCard";
 import TitleSection from "../TitleSection";
@@ -61,62 +62,49 @@ const PROJECTS = [
 
 export default function ProjectsHighlight() {
     const listRef = useRef<HTMLDivElement>(null);
+    const lenis = useLenisStore((state) => state.lenis);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            const list = listRef.current;
-            if (!list) return;
+        const list = listRef.current;
+        if (!list || !lenis) return;
 
-            const mainElement = list.closest("main");
-            if (!mainElement) return;
+        const scroller = lenis.options.wrapper as HTMLElement;
+        const cards = list.querySelectorAll<HTMLElement>(":scope > *");
 
-            const cards = list.querySelectorAll<HTMLElement>(":scope > *");
-
+        const ctx = gsap.context(() => {
             gsap.set(cards, { opacity: 0, x: -120 });
 
-            const triggers = Array.from(cards).map((card) =>
-                ScrollTrigger.create({
-                    trigger: card,
-                    scroller: mainElement,
-                    start: "top 75%",
-                    onEnter: () =>
-                        gsap.to(card, {
-                            opacity: 1,
-                            x: 0,
-                            duration: 1.6,
-                            ease: "expo.out",
-                        }),
-                    onLeaveBack: () =>
-                        gsap.to(card, {
-                            opacity: 0,
-                            x: -120,
-                            duration: 0.6,
-                            ease: "power2.in",
-                        }),
-                })
-            );
+            cards.forEach((card) => {
+                gsap.to(card, {
+                    opacity: 1,
+                    x: 0,
+                    duration: 1.6,
+                    ease: "expo.out",
+                    scrollTrigger: {
+                        trigger: card,
+                        scroller: scroller,
+                        start: "top 85%",
+                        once: true,
+                    },
+                });
+            });
+        }, list);
 
-            ScrollTrigger.refresh();
-
-            return () => triggers.forEach((t) => t.kill());
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, []);
+        return () => ctx.revert();
+    }, [lenis]);
 
     return (
-        <section className="w-full py-24 px-6 mb-36">
-            <TitleSection title="**Personal** Projects" />
+        <section className="container">
+            <TitleSection title="**Personal** Projects" classname="mt-40" />
 
-            <div ref={listRef} className="flex flex-col gap-6 max-w-5xl mx-auto pt-20">
+            <div
+                ref={listRef}
+                className="flex flex-col lg:gap-8 md:gap-20 gap-32 xl:py-32 md:pb-32 md:pt-20 mb-24 mt-40"
+            >
                 {PROJECTS.map((p) => (
                     <ProjectHighlight key={p.index} {...p} />
                 ))}
             </div>
-
-            {/* <div className="text-center pt-32">
-                <ButtonHover href="/projects" label="All projects" />
-            </div> */}
         </section>
     );
 }

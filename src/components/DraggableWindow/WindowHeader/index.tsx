@@ -5,16 +5,18 @@ import MinusIcon from "@/components/Icons/MinusIcon";
 
 interface WindowHeaderProps {
     title: string;
-    onMouseDown?: (e: React.MouseEvent) => void;
+    onPointerDown?: (e: React.PointerEvent) => void;
 }
 
-export function WindowHeader({ title, onMouseDown }: WindowHeaderProps) {
+export function WindowHeader({ title, onPointerDown }: WindowHeaderProps) {
     return (
         <div
-            onMouseDown={onMouseDown}
-            className="border-b border-base-300 px-4 py-2 flex items-center justify-between select-none transition-colors"
+            onPointerDown={onPointerDown}
+            className={`border-b border-base-300 px-4 py-2 flex items-center justify-between select-none transition-colors ${
+                onPointerDown ? "cursor-grab active:cursor-grabbing" : ""
+            }`}
         >
-            <span className="text-white text-sm font-medium mr-6">{title}</span>
+            <span className="text-white text-sm font-medium mr-6 pointer-events-none">{title}</span>
             <div className="window-controls flex gap-2">
                 <ButtonIcon aria-label="Minimize window">
                     <MinusIcon />

@@ -35,30 +35,32 @@ const ButtonIcon = ({ active, children, href, onClick, label }: Props) => {
             {label && (
                 <div
                     className="
-                        absolute left-full ml-5
-                        px-2 py-1
-                        text-xs rounded-md
-                        leading-none
-                        bg-white text-black
-                        whitespace-nowrap
-                        shadow-md
-                        lowercase
-                        opacity-0 translate-x-[-8px]
-                        group-hover:opacity-100 group-hover:translate-x-0
-                        transition-all duration-500 ease-out
-                        pointer-events-none
-                    "
+            absolute left-full ml-5
+            px-2 py-1
+            text-xs rounded-md
+            leading-none
+            bg-white text-black
+            whitespace-nowrap
+            shadow-md
+            lowercase
+            opacity-0 translate-x-[-8px]
+            pointer-events-none
+            
+            [@media(hover:hover)]:group-hover:opacity-100 
+            [@media(hover:hover)]:group-hover:translate-x-0
+            transition-all duration-500 ease-out
+        "
                 >
                     {label}
 
                     <div
                         className="
-                            absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full
-                            w-0 h-0
-                            border-t-[6px] border-t-transparent
-                            border-b-[6px] border-b-transparent
-                            border-r-[6px] border-r-white
-                        "
+                absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full
+                w-0 h-0
+                border-t-[6px] border-t-transparent
+                border-b-[6px] border-b-transparent
+                border-r-[6px] border-r-white
+            "
                     />
                 </div>
             )}

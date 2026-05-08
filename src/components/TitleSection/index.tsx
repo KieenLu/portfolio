@@ -5,12 +5,16 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
 
 import { usePageConcept } from "@/hooks/usePageConcept";
+import { useLenisStore } from "@/store/Lenis";
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+}
 
 const TitleSection = ({ title, classname }: { title: string; classname?: string }) => {
     const containerRef = useRef<HTMLHeadingElement>(null);
     const { color } = usePageConcept();
+    const lenis = useLenisStore((s) => s.lenis);
 
     const words = title.split(" ").map((word) => {
         const isAccent = word.startsWith("**") && word.endsWith("**");
@@ -21,67 +25,67 @@ const TitleSection = ({ title, classname }: { title: string; classname?: string 
     });
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            const container = containerRef.current;
-            if (!container) return;
+        const container = containerRef.current;
+        if (!container || !lenis) return;
 
-            const mainElement = container.closest("main");
-            if (!mainElement) return;
+        const scrollerEl = lenis.options.wrapper as HTMLElement;
 
-            const charEls = container.querySelectorAll<HTMLSpanElement>(".domino-char");
-            if (charEls.length === 0) return;
+        const onScroll = () => ScrollTrigger.update();
+        lenis.on("scroll", onScroll);
 
-            gsap.set(charEls, {
-                opacity: 0,
-                y: 20,
-            });
+        let ctx = gsap.context(() => {
+            const charEls = container.querySelectorAll(".domino-char");
+
+            gsap.set(charEls, { opacity: 0, y: 20 });
 
             gsap.to(charEls, {
                 opacity: 1,
                 y: 0,
                 duration: 0.4,
                 ease: "power2.out",
-                stagger: {
-                    each: 0.06,
-                    from: "start",
-                },
+                stagger: 0.06,
                 scrollTrigger: {
                     trigger: container,
-                    scroller: mainElement,
-                    start: "top 88%",
+                    scroller: scrollerEl,
+                    start: "top 85%",
                     toggleActions: "play none none reverse",
+                    invalidateOnRefresh: true,
                 },
             });
+        }, containerRef);
 
+        const refreshTimer = setTimeout(() => {
             ScrollTrigger.refresh();
-        }, 300);
+        }, 200);
 
-        return () => clearTimeout(timer);
-    }, []);
+        return () => {
+            lenis.off("scroll", onScroll);
+            ctx.revert();
+            clearTimeout(refreshTimer);
+        };
+    }, [title, lenis]);
 
     return (
         <h2
             ref={containerRef}
-            className={`text-center text-5xl text-white mb-12 ${classname || ""}`}
+            className={`text-center text-title-section text-white mb-12 mx-auto ${classname || ""}`}
+            style={{ wordBreak: "break-word" }}
         >
             {words.map((word, wordIndex) => (
-                <span key={wordIndex} style={{ display: "inline-block" }}>
+                <span key={wordIndex} className="inline-block whitespace-nowrap">
                     {word.text.split("").map((char, charIndex) => (
                         <span
                             key={charIndex}
-                            className="domino-char"
+                            className="domino-char inline-block"
                             style={{
-                                display: "inline-block",
                                 color: word.isAccent ? color : undefined,
-                                fontWeight: word.isAccent ? undefined : 500,
+                                fontWeight: word.isAccent ? 700 : 500,
                             }}
                         >
                             {char}
                         </span>
                     ))}
-                    {wordIndex < words.length - 1 && (
-                        <span style={{ display: "inline-block" }}>&nbsp;</span>
-                    )}
+                    {wordIndex < words.length - 1 && <span>&nbsp;</span>}
                 </span>
             ))}
         </h2>

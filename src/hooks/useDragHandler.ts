@@ -48,19 +48,22 @@ export function useDragHandler({ windowRef, containerRef, enabled = true }: UseD
         }
     }, [windowRef]);
 
-    const handleMouseDown = useCallback(
-        (e: React.MouseEvent) => {
+    const handlePointerDown = useCallback(
+        (e: React.PointerEvent) => {
             if (!enabled) return;
             if ((e.target as HTMLElement).closest(".window-controls")) return;
+
+            const target = e.currentTarget as HTMLElement;
+            target.setPointerCapture(e.pointerId);
 
             bringToFront();
             setIsDragging(true);
             isDraggingRef.current = true;
             setBodyOverflow(true);
 
-            const domX = parseFloat(windowRef.current?.style.left ?? "0");
-            const domY = parseFloat(windowRef.current?.style.top ?? "0");
-            currentRef.current = { x: domX, y: domY };
+            const domX = currentRef.current.x;
+            const domY = currentRef.current.y;
+
             targetRef.current = { x: domX, y: domY };
 
             dragOriginRef.current = {
@@ -88,7 +91,7 @@ export function useDragHandler({ windowRef, containerRef, enabled = true }: UseD
         const resist = (raw: number, min: number, max: number) =>
             raw < min ? min + (raw - min) * 0.1 : raw > max ? max + (raw - max) * 0.1 : raw;
 
-        const handleMouseMove = (e: MouseEvent) => {
+        const handlePointerMove = (e: PointerEvent) => {
             const { startX, startY, startPosX, startPosY } = dragOriginRef.current;
             const bounds = getBounds();
 
@@ -98,7 +101,14 @@ export function useDragHandler({ windowRef, containerRef, enabled = true }: UseD
             };
         };
 
-        const handleMouseUp = () => {
+        const handlePointerUp = (e: PointerEvent) => {
+            const target = e.currentTarget as HTMLElement;
+            if (e.pointerId !== undefined) {
+                try {
+                    target.releasePointerCapture(e.pointerId);
+                } catch (e) {}
+            }
+
             isDraggingRef.current = false;
             setBodyOverflow(false);
             setIsDragging(false);
@@ -119,13 +129,13 @@ export function useDragHandler({ windowRef, containerRef, enabled = true }: UseD
             startLoop();
         };
 
-        document.addEventListener("mousemove", handleMouseMove);
-        document.addEventListener("mouseup", handleMouseUp);
+        document.addEventListener("pointermove", handlePointerMove);
+        document.addEventListener("pointerup", handlePointerUp);
         return () => {
-            document.removeEventListener("mousemove", handleMouseMove);
-            document.removeEventListener("mouseup", handleMouseUp);
+            document.removeEventListener("pointermove", handlePointerMove);
+            document.removeEventListener("pointerup", handlePointerUp);
         };
     }, [isDragging, getBounds, startLoop, isDraggingRef, targetRef, windowRef]);
 
-    return { isDragging, handleMouseDown, zIndexRef, targetRef, currentRef };
+    return { isDragging, handlePointerDown, zIndexRef, targetRef, currentRef };
 }

@@ -6,11 +6,13 @@ interface Props {
 
 const TechSkillItem = ({ icon: Icon }: Props) => {
     return (
-        <div
-            className={`p-4 flex items-center justify-center rounded-lg `}
-            style={{ aspectRatio: 300 / 150 }}
-        >
-            <Icon className="w-full h-full max-h-14" />
+        <div className={`p-1 md:p-2 xl:p-4 flex items-center justify-center technical-skill `}>
+            <Icon
+                className="w-full h-full max-h-14 "
+                style={{
+                    aspectRatio: "3/1",
+                }}
+            />
         </div>
     );
 };

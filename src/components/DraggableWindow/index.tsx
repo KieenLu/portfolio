@@ -2,6 +2,7 @@
 
 import { forwardRef, useCallback, useEffect, useRef } from "react";
 
+import { useDevice } from "@/hooks/useDevice";
 import { useDragHandler } from "@/hooks/useDragHandler";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
@@ -11,7 +12,6 @@ export interface PositionType {
     x: number;
     y: number;
 }
-
 export interface BoundsType {
     minX: number;
     minY: number;
@@ -24,14 +24,14 @@ export interface DraggableWindowProps {
     children: React.ReactNode;
     isDrag?: boolean;
     initialPosition?: PositionType;
-    maxWidth?: number;
     className?: string;
     containerRef?: React.RefObject<HTMLElement>;
     onRevealComplete?: () => void;
+    width?: string | number;
 }
 
-const BASE_CLASSES =
-    "select-none bg-black/60 transition-colors duration-300 border rounded border border-base-300 shadow-2xl overflow-hidden";
+const BASE_WINDOW_CLASSES =
+    "select-none bg-black/60 transition-colors duration-300 rounded border border-base-300 shadow-2xl overflow-hidden";
 
 const DraggableWindow = forwardRef<HTMLDivElement, DraggableWindowProps>(
     (
@@ -40,73 +40,118 @@ const DraggableWindow = forwardRef<HTMLDivElement, DraggableWindowProps>(
             children,
             isDrag = true,
             initialPosition = { x: 100, y: 100 },
-            maxWidth = 300,
             className = "",
             containerRef,
             onRevealComplete,
+            width = "max-content",
         },
-        outerRef
+        forwardedRef
     ) => {
-        const windowRef = useRef<HTMLDivElement>(null);
+        const { device } = useDevice();
+
+        const isDragEnabled = isDrag && device !== "mobile";
+
+        const internalRef = useRef<HTMLDivElement>(null);
 
         const setRef = useCallback(
-            (el: HTMLDivElement | null) => {
-                (windowRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-                if (typeof outerRef === "function") outerRef(el);
-                else if (outerRef) outerRef.current = el;
+            (node: HTMLDivElement | null) => {
+                internalRef.current = node;
+                if (typeof forwardedRef === "function") forwardedRef(node);
+                else if (forwardedRef) (forwardedRef as any).current = node;
             },
-            [outerRef]
+            [forwardedRef]
         );
 
-        const { isDragging, handleMouseDown, zIndexRef, targetRef, currentRef } = useDragHandler({
-            windowRef,
+        const { isDragging, handlePointerDown, zIndexRef, targetRef, currentRef } = useDragHandler({
+            windowRef: internalRef,
             containerRef,
-            enabled: isDrag,
+            enabled: isDragEnabled,
         });
 
-        useScrollReveal(windowRef, onRevealComplete);
+        useScrollReveal(internalRef, onRevealComplete);
+
+        const clampPosition = useCallback(
+            (x: number, y: number) => {
+                if (!containerRef?.current || !internalRef.current) return { x, y };
+
+                const containerW = containerRef.current.offsetWidth;
+                const windowW = internalRef.current.offsetWidth;
+                const maxX = Math.max(0, containerW - windowW);
+                const clampedX = Math.min(Math.max(0, x), maxX);
+                const clampedY = Math.max(0, y);
+
+                return { x: clampedX, y: clampedY };
+            },
+            [containerRef]
+        );
 
         useEffect(() => {
             if (!isDrag) return;
-            targetRef.current = { ...initialPosition };
-            currentRef.current = { ...initialPosition };
-            if (windowRef.current) {
-                windowRef.current.style.left = `${initialPosition.x}px`;
-                windowRef.current.style.top = `${initialPosition.y}px`;
-            }
-        }, [isDrag, initialPosition.x, initialPosition.y]);
 
-        if (!isDrag) {
-            return (
-                <div
-                    ref={setRef}
-                    className={`${BASE_CLASSES} ${className}`}
-                    style={{ maxWidth, width: "max-content", minWidth: maxWidth }}
-                >
-                    <WindowHeader title={title} />
-                    <div className="p-3 text-gray-300">{children}</div>
-                </div>
-            );
-        }
+            requestAnimationFrame(() => {
+                const { x, y } = clampPosition(initialPosition.x, initialPosition.y);
+
+                targetRef.current = { x, y };
+                currentRef.current = { x, y };
+
+                if (internalRef.current) {
+                    internalRef.current.style.left = `${x}px`;
+                    internalRef.current.style.top = `${y}px`;
+                }
+            });
+        }, [isDrag, initialPosition.x, initialPosition.y, targetRef, currentRef, clampPosition]);
+
+        useEffect(() => {
+            if (!isDragEnabled || !containerRef?.current || !internalRef.current) return;
+
+            const handleResize = () => {
+                const currentX = currentRef.current.x;
+                const currentY = currentRef.current.y;
+
+                const { x: newX, y: newY } = clampPosition(currentX, currentY);
+
+                if (newX !== currentX || newY !== currentY) {
+                    currentRef.current = { x: newX, y: newY };
+                    targetRef.current = { x: newX, y: newY };
+
+                    internalRef.current.style.left = `${newX}px`;
+                    internalRef.current.style.top = `${newY}px`;
+                }
+            };
+
+            const resizeObserver = new ResizeObserver(handleResize);
+            resizeObserver.observe(containerRef.current);
+            window.addEventListener("resize", handleResize);
+
+            return () => {
+                resizeObserver.disconnect();
+                window.removeEventListener("resize", handleResize);
+            };
+        }, [isDragEnabled, containerRef, currentRef, targetRef, clampPosition]);
+
+        const commonStyle: React.CSSProperties = {
+            width: width === "100%" ? "100%" : width,
+            maxWidth: typeof width === "number" ? `${width}px` : width,
+            minWidth: "200px",
+        };
 
         return (
             <div
                 ref={setRef}
-                className={`absolute ${BASE_CLASSES} ${
-                    isDragging ? "cursor-grabbing" : "cursor-grab"
-                } ${className}`}
+                className={`${isDrag ? "absolute" : ""} ${BASE_WINDOW_CLASSES} ${isDragEnabled ? (isDragging ? "cursor-grabbing" : "cursor-grab") : ""} ${className}`}
                 style={{
-                    left: 0,
-                    top: 0,
-                    maxWidth,
-                    width: "max-content",
-                    minWidth: maxWidth,
-                    height: "max-content",
+                    ...commonStyle,
+                    left: isDrag ? 0 : undefined,
+                    top: isDrag ? 0 : undefined,
                     zIndex: zIndexRef.current,
+                    touchAction: isDragEnabled ? "none" : "auto",
                 }}
             >
-                <WindowHeader title={title} onMouseDown={handleMouseDown} />
-                <div className="p-3 text-gray-300 select-none">{children}</div>
+                <WindowHeader
+                    title={title}
+                    onPointerDown={isDragEnabled ? handlePointerDown : undefined}
+                />
+                <div className="text-gray-300 select-none">{children}</div>
             </div>
         );
     }
