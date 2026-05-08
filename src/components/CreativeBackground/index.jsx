@@ -198,7 +198,7 @@ const CreativeBackground = () => {
     }, [backgroundRgb, baseGradientFrom, lightPointPosition]);
 
     return (
-        <div className="-z-20 w-full h-full absolute bg-black">
+        <div className="-z-20 w-full h-full absolute">
             <canvas
                 ref={canvasRef}
                 className="absolute inset-0 w-full h-full"

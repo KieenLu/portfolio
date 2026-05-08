@@ -1,6 +1,6 @@
 const DetailAboutContent = () => {
     return (
-        <div className="font-mono text-base text-gray-200 leading-7">
+        <div className="font-mono text-base leading-relaxed flex flex-col gap-3">
             <p>
                 1. Hi, I&apos;m <span className="text-green-400">Kien</span>, a
                 <span className="text-blue-400"> Front-End Developer</span> with a strong focus on

@@ -14,6 +14,10 @@ interface PageConcept {
         position: { x: number; y: number; z: number };
         size: number;
         rotation: { x: number; y: number; z: number };
+        mobilePosition: { x: number; y: number; z: number };
+        mobileSize: number;
+        tabletPosition: { x: number; y: number; z: number };
+        tabletSize: number;
     }[];
     lightPointPosition: {
         topRightX: number;
@@ -41,12 +45,20 @@ export const PAGE_CONCEPTS: Record<string, PageConcept> = {
                 position: { x: -5.5, y: -2, z: 7 },
                 size: 1.5,
                 rotation: { x: -0.2, y: 1, z: 0.1 },
+                tabletPosition: { x: -5, y: -6, z: 14 },
+                tabletSize: 3.5,
+                mobilePosition: { x: -7, y: -11, z: 20 },
+                mobileSize: 5,
             },
             {
                 char: "@",
                 position: { x: -6.5, y: 3.2, z: 2 },
                 size: 1.5,
                 rotation: { x: -0.2, y: 0.1, z: 0.3 },
+                tabletPosition: { x: -4, y: 4, z: 6 },
+                tabletSize: 2.5,
+                mobilePosition: { x: -10, y: 8, z: 5 },
+                mobileSize: 4.5,
             },
             // {
             //     char: "$",
@@ -59,6 +71,10 @@ export const PAGE_CONCEPTS: Record<string, PageConcept> = {
                 position: { x: 7.8, y: -2, z: 1 },
                 size: 1.7,
                 rotation: { x: -0.1, y: 0.2, z: -0.1 },
+                tabletPosition: { x: 6, y: -4, z: 6 },
+                tabletSize: 2.5,
+                mobilePosition: { x: 8, y: -6, z: 12 },
+                mobileSize: 5,
             },
             // {
             //     char: "#",
@@ -71,6 +87,10 @@ export const PAGE_CONCEPTS: Record<string, PageConcept> = {
                 position: { x: 7.5, y: 2, z: 6 },
                 size: 3,
                 rotation: { x: 0, y: -0.3, z: 0.1 },
+                tabletPosition: { x: 6, y: 7, z: 12 },
+                tabletSize: 4,
+                mobilePosition: { x: 7, y: 11, z: 20 },
+                mobileSize: 6,
             },
         ],
         lightPointPosition: {
@@ -97,12 +117,20 @@ export const PAGE_CONCEPTS: Record<string, PageConcept> = {
                 position: { x: -5.5, y: 1, z: 7 },
                 size: 1.5,
                 rotation: { x: -0.2, y: 1, z: 0.1 },
+                tabletPosition: { x: -5, y: 6, z: 14 },
+                tabletSize: 3.5,
+                mobilePosition: { x: -7, y: 6, z: 20 },
+                mobileSize: 6,
             },
             {
                 char: "~",
                 position: { x: -6.5, y: -3.2, z: 2 },
                 size: 1.5,
                 rotation: { x: -0.2, y: 0.1, z: 0.3 },
+                tabletPosition: { x: -4, y: -5, z: 6 },
+                tabletSize: 3,
+                mobilePosition: { x: -5, y: -6, z: 12 },
+                mobileSize: 5,
             },
             // {
             //     char: "$",
@@ -115,6 +143,10 @@ export const PAGE_CONCEPTS: Record<string, PageConcept> = {
                 position: { x: 7.8, y: 2, z: 1 },
                 size: 1.7,
                 rotation: { x: -0.1, y: 0.2, z: -0.1 },
+                tabletPosition: { x: 6, y: 3, z: 6 },
+                tabletSize: 3.5,
+                mobilePosition: { x: 6, y: 3, z: 12 },
+                mobileSize: 5,
             },
             // {
             //     char: "#",
@@ -127,6 +159,10 @@ export const PAGE_CONCEPTS: Record<string, PageConcept> = {
                 position: { x: 7.5, y: -2, z: 6 },
                 size: 2,
                 rotation: { x: 0, y: -0.3, z: 0.1 },
+                tabletPosition: { x: 5, y: -6, z: 12 },
+                tabletSize: 3.5,
+                mobilePosition: { x: 7, y: -5, z: 20 },
+                mobileSize: 6,
             },
         ],
         lightPointPosition: {

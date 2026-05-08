@@ -97,7 +97,7 @@ export default function ButtonHover({ label = "about-me", href, onClick }: Props
             onClick={handleClick}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="hover-button relative inline-flex items-center gap-[0.3em] px-6 py-4 cursor-pointer font-mono text-xs tracking-widest select-none whitespace-nowrap"
+            className="glossy hover-button relative inline-flex items-center gap-[0.3em] px-4 py-3 lg:px-6 lg:py-4 cursor-pointer font-mono text-xs tracking-widest select-none whitespace-nowrap"
             style={
                 {
                     textDecoration: "none",
@@ -118,7 +118,7 @@ export default function ButtonHover({ label = "about-me", href, onClick }: Props
 
             <span
                 className="relative z-10 inline-flex overflow-hidden"
-                style={{ height: "1.15em" }}
+                style={{ height: "100%" }}
                 aria-label={label}
             >
                 {chars.map((char, i) => (
@@ -127,9 +127,9 @@ export default function ButtonHover({ label = "about-me", href, onClick }: Props
                         ref={(el) => {
                             if (el) charsRef.current[i] = el;
                         }}
-                        className="inline-flex items-center justify-center text-sm lowercase"
+                        className="inline-flex items-center justify-center text-btn-hv lowercase"
                         style={{
-                            height: "1.15em",
+                            height: "100%",
                             width: char === " " ? "0.35em" : "",
                             color: color,
                         }}
@@ -141,14 +141,14 @@ export default function ButtonHover({ label = "about-me", href, onClick }: Props
 
             <span
                 className="relative z-10 inline-flex overflow-hidden"
-                style={{ height: "1.15em", width: "1em" }}
+                style={{ height: "100%", width: "1em" }}
                 aria-hidden="true"
             >
                 <span
                     ref={arrowRef}
                     className="inline-flex items-center justify-center w-full"
                     style={{
-                        height: "1.15em",
+                        height: "100%",
                         color: color,
                     }}
                 >

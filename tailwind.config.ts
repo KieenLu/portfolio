@@ -8,6 +8,9 @@ const config: Config = {
     ],
     theme: {
         extend: {
+            colors: {
+                dynamic: "var(--hover-color)",
+            },
             stroke: {
                 icon: "oklch(40.5398% 0 0 / 1)",
             },
@@ -17,9 +20,62 @@ const config: Config = {
         require("@tailwindcss/typography"),
         plugin(function ({ addUtilities }) {
             addUtilities({
+                //bg
                 ".glossy": {
                     backgroundColor: "oklch(16.8416% 0 0/0.25)",
                 },
+                //text
+                ".text-btn-hv": {
+                    fontSize: "12px",
+                    "@screen lg": {
+                        fontSize: "16px",
+                    },
+                },
+                ".text-title-section ": {
+                    fontSize: "26px",
+                    "@screen md": {
+                        fontSize: "40px",
+                    },
+                    "@screen lg": {
+                        fontSize: "48px",
+                    },
+                },
+                ".text-base": {
+                    fontSize: "13px",
+                    "@screen md": {
+                        fontSize: "14px",
+                    },
+                    "@screen lg": {
+                        fontSize: "14px",
+                    },
+                    "@screen xl": {
+                        fontSize: "16px",
+                    },
+                },
+                ".anim-title": {
+                    color: "white",
+                    lineHeight: "1.5",
+                    fontSize: "1.875rem",
+                    "@screen sm": {
+                        fontSize: "3rem",
+                        lineHeight: "1",
+                    },
+                    "@screen md": {
+                        fontSize: "3.75rem",
+                        lineHeight: "1",
+                    },
+                    "@screen lg": {
+                        fontSize: "4.5rem",
+                        lineHeight: "1",
+                    },
+                    "@screen xl": { fontSize: "4.5rem", lineHeight: "1" },
+                    "@screen 2xl": { fontSize: "6rem", lineHeight: "1" },
+                },
+                ".anim-sub": {
+                    display: "inline-block",
+                    willChange: "transform, opacity",
+                },
+                //layout
                 ".container": {
                     width: "100%",
                     margin: "0 auto",
@@ -31,6 +87,7 @@ const config: Config = {
                         maxWidth: "1440px",
                     },
                 },
+                ".technical-skill": {},
                 ".border-base-300": {
                     borderColor: "oklch(40.5398% 0 0 / 1)",
                 },
@@ -43,8 +100,18 @@ const config: Config = {
                 },
                 ".text-primary": {
                     color: "oklch(0.8 0 0 / 1)",
-                    fontSize: "16px",
+                    fontSize: "12px",
                     fontWeight: "400",
+                    lineHeight: "1.5",
+                    "@screen md": {
+                        fontSize: "14px",
+                    },
+                    "@screen lg": {
+                        fontSize: "16px",
+                    },
+                    "@screen xl": {
+                        fontSize: "18px",
+                    },
                 },
                 ".scrollbar-custom": {
                     scrollbarWidth: "thin",

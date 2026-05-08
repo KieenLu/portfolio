@@ -26,11 +26,9 @@ import TechSkillItem from "@/components/TechSkillItem";
 import TitleSection from "@/components/TitleSection";
 
 type SvgIcon = React.FC<React.SVGProps<SVGSVGElement>>;
-type Variant = "core" | "interactive" | "exploring";
 
 interface TechItem {
     icon: SvgIcon;
-    variant?: Variant;
 }
 
 const TECH_LIST: TechItem[] = [
@@ -74,37 +72,34 @@ const TechnicalBanner = () => {
     };
 
     return (
-        <div className="container flex items-center justify-center">
-            <div className="pt-60 pb-96">
+        <div className="container ">
+            <div className="lg:pt-60 lg:pb-96 md:pt-48 md:pb-72 pt-28 pb-64 domino-char">
                 <TitleSection classname="mb-56" title="Some of the **techs** I like to work with" />
 
                 <div
                     className="relative before:content-[''] before:h-[165px] before:absolute before:w-[1px] before:left-[50%] before:top-[-165px] before:bg-gradient-to-t from-[#e3e40d] to-transparent
-                
                  after:content-[''] after:h-[165px] after:absolute after:w-[1px] after:left-[50%] after:bottom-[-165px] after:bg-gradient-to-t after:rotate-180
                 "
                 >
                     <DraggableWindow
-                        maxWidth={1200}
+                        width={"100%"}
                         title="techs"
                         isDrag={false}
                         onRevealComplete={handleRevealComplete}
                     >
-                        <div className="flex flex-col gap-4">
-                            <div className="grid grid-cols-3 md:grid-cols-6 gap-8">
-                                {TECH_LIST.map(({ icon }, index) => (
-                                    <div
-                                        key={index}
-                                        className="cursor-pointer"
-                                        style={{ opacity: 0 }}
-                                        ref={(el) => {
-                                            if (el) itemsRef.current[index] = el;
-                                        }}
-                                    >
-                                        <TechSkillItem icon={icon} />
-                                    </div>
-                                ))}
-                            </div>
+                        <div className="xl:p-6 p-4 grid grid-cols-3 xl:grid-cols-6 md:grid-cols-3 lg:gap-8 md:gap-y-8 gap-y-6">
+                            {TECH_LIST.map(({ icon }, index) => (
+                                <div
+                                    key={index}
+                                    className="cursor-pointer"
+                                    style={{ opacity: 0 }}
+                                    ref={(el) => {
+                                        if (el) itemsRef.current[index] = el;
+                                    }}
+                                >
+                                    <TechSkillItem icon={icon} />
+                                </div>
+                            ))}
                         </div>
                     </DraggableWindow>
                 </div>
