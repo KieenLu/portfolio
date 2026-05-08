@@ -36,7 +36,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={clsx(ppNeueMachina.className, "relative h-dvh overflow-hidden")}>
-                {/* <PreloaderScreen /> */}
+                <PreloaderScreen />
                 <CreativeBackground />
 
                 <Wrapper>{children}</Wrapper>
