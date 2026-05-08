@@ -5,6 +5,7 @@ import MinusIcon from "@/components/Icons/MinusIcon";
 
 interface WindowHeaderProps {
     title: string;
+    // eslint-disable-next-line no-unused-vars
     onPointerDown?: (e: React.PointerEvent) => void;
 }
 

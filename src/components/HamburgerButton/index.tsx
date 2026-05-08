@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { useRef } from "react";
 
 interface HamburgerButtonProps {
+    // eslint-disable-next-line no-unused-vars
     onToggle?: (isOpen: boolean) => void;
     className?: string;
 }
