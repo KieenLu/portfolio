@@ -44,8 +44,9 @@ const DetailAboutContent = () => {
                 invest time in learning new technologies, improving problem-solving skills, and
                 exploring areas like
                 <span className="text-blue-400"> system design</span>,
-                <span className="text-purple-400"> AI-assisted development</span>, and scalable
-                architecture to become a more impactful
+                <span className="text-purple-400"> AI-assisted development</span>, and{" "}
+                <span className="text-blue-400">scalable architecture</span> to become a more
+                impactful
                 <span className="text-green-400"> software engineer</span>.
             </p>
         </div>

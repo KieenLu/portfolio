@@ -4,19 +4,19 @@ import gsap from "gsap";
 import { useRef } from "react";
 
 import IconAntd from "@/assets/icons/i-ant-design.svg";
+import IconGGAntigravity from "@/assets/icons/i-antigravity.svg";
 import IconAxios from "@/assets/icons/i-axios.svg";
-import IconCss from "@/assets/icons/i-css.svg";
+import IconClaude from "@/assets/icons/i-claude.svg";
+import IconCopilot from "@/assets/icons/i-copilot.svg";
 import IconFigma from "@/assets/icons/i-figma.svg";
 import IconFlutter from "@/assets/icons/i-flutter.svg";
 import IconGsap from "@/assets/icons/i-gsap.svg";
-import IconHTML from "@/assets/icons/i-html5.svg";
 import IconJavaScript from "@/assets/icons/i-js.svg";
 import IconMaterialUI from "@/assets/icons/i-materialui.svg";
 import IconNestJs from "@/assets/icons/i-nestjs.svg";
 import IconNextJs from "@/assets/icons/i-nextjs.svg";
 import IconReact from "@/assets/icons/i-react.svg";
 import IconRedux from "@/assets/icons/i-redux.svg";
-import IconSass from "@/assets/icons/i-sass.svg";
 import IconTailwind from "@/assets/icons/i-tailwind.svg";
 import IconTanStack from "@/assets/icons/i-tanstack.svg";
 import IconTypeScript from "@/assets/icons/i-typescript.svg";
@@ -39,9 +39,6 @@ const TECH_LIST: TechItem[] = [
     { icon: IconNestJs },
     { icon: IconFlutter },
     { icon: IconTailwind },
-    { icon: IconSass },
-    { icon: IconCss },
-    { icon: IconHTML },
     { icon: IconMaterialUI },
     { icon: IconAntd },
     { icon: IconRedux },
@@ -50,6 +47,9 @@ const TECH_LIST: TechItem[] = [
     { icon: IconGsap },
     { icon: IconAxios },
     { icon: IconFigma },
+    { icon: IconGGAntigravity },
+    { icon: IconClaude },
+    { icon: IconCopilot },
 ];
 
 const TechnicalBanner = () => {

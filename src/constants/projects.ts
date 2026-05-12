@@ -4,53 +4,46 @@ import {
     ImageProjectShopper,
     ImageProjectWooder,
 } from "@/assets/images";
-import { TypeListProject } from "@/types/image";
 
-export const LIST_PROJECT: TypeListProject[] = [
+export const PROJECTS = [
     {
-        name: "Shopper",
-        href: "https://e-shopper.site/",
+        index: 1,
+        title: "Shopper E-commerce",
+        year: "2025",
         tags: [
             "Next.js",
             "Typescript",
             "AntDesign",
             "TailWindCSS",
             "Axios",
-            "Redux-Saga",
-            "NextAuth",
-            "...",
+            "Redux",
+            "TanStack Query",
         ],
-        image: {
-            alt: "Image's Shopper eCommerce",
-            url: ImageProjectShopper.src,
-        },
+        imageSrc: ImageProjectShopper.src,
+        href: "https://shopper-next.vercel.app/",
     },
     {
-        name: "CFD Course",
+        index: 2,
+        title: "CFD Course",
+        year: "2025",
+        tags: ["React", "AntDesign", "TailWindCSS", "Axios", "Redux"],
+        imageSrc: ImageProjectCFDCourse.src,
         href: "https://courses-cfd.vercel.app/",
-        tags: ["React", "AntDesign", "TailWindCSS", "Axios", "Redux", "..."],
-        image: {
-            alt: "Image's CDF Course",
-            url: ImageProjectCFDCourse.src,
-        },
     },
     {
-        name: "Benoit",
+        index: 3,
+        title: "Benoit Landing Page",
+        year: "2025",
+        tags: ["HTML", "CSS", "SCSS", "Grunt", "Figma"],
+        imageSrc: ImageProjectBenoit.src,
         href: "https://kieenlu.github.io/Benoit/",
-        tags: ["HTML/CSS/SCSS", "Grunt", "Figma"],
-        image: {
-            alt: "Image's Benoit Landing Page",
-            url: ImageProjectBenoit.src,
-        },
     },
-
     {
-        name: "Wooder",
+        index: 4,
+        title: "Wooder Landing Page",
+        year: "2025",
+        tags: ["HTML", "CSS", "SCSS", "Grunt", "Figma"],
+        imageSrc: ImageProjectWooder.src,
         href: "https://kieenlu.github.io/Wooder/",
-        tags: ["HTML/CSS/SCSS", "Grunt", "Figma"],
-        image: {
-            alt: "Image's Wooder Landing Page",
-            url: ImageProjectWooder.src,
-        },
     },
 ];
